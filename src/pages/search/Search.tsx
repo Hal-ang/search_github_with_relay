@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 
 import { SEARCH_LIST } from '../../mock/searchList';
+import starIcon from '../../assets/star.svg';
 
 const result = SEARCH_LIST.data.search.edges;
-
 const Search = () => {
   const [inputValue, setInputValue] = useState('');
-  const [isFocuesd, setIsFocused] = useState(false);
 
   const [isSearched, setIsSearched] = useState(false);
 
   return (
-    <main className='flex flex-col justify-center items-center'>
-      <header>
+    <main
+      className={`flex flex-col items-center px-16pxr bg-green-50 ${
+        !isSearched ? 'justify-center' : 'justify-start'
+      }`}
+    >
+      <header className='sticky top-0 bg-green-50 w-full py-20pxr flex justify-center'>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -21,10 +24,8 @@ const Search = () => {
         >
           <input
             type='text'
-            placeholder={isFocuesd ? '' : '검색어 입력'}
+            placeholder='검색어 입력'
             value={inputValue}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
             className={`border border-gray-300 focus:border-green-500 caret-green-500 rounded-md py-12pxr px-18pxr`}
             onChange={(e) => setInputValue(e.currentTarget.value)}
           />
@@ -35,14 +36,48 @@ const Search = () => {
           />
         </form>
       </header>
-      <section>
-        {result.map((item) => (
-          <>
-            <div>{item.node.name}</div>
-            <div>{item.node.description}</div>
-            <div>{item.node.stargazers.totalCount}</div>
-          </>
-        ))}
+      <section className='mt-30pxr pb-50pxr'>
+        {isSearched &&
+          [
+            ...result,
+            ...result,
+            ...result,
+            ...result,
+            ...result,
+            ...result,
+          ].map((item) => (
+            <div className='flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md'>
+              <a
+                target='__blank'
+                href={item.node.url}
+                className='font-bold text-20pxr hover:underline'
+              >
+                {item.node.name}
+              </a>
+              <p className='text-gray-500 text-15pxr line-clamp-2'>
+                {item.node.description}
+              </p>
+              <button
+                onClick={() => console.log('click star button')}
+                className={`mt-5pxr flex flew-row item-center py-5pxr px-8pxr rounded-md hover:bg-green-100 border ${
+                  item.node.viewerHasStarred
+                    ? 'bg-green-50 border-green-400'
+                    : 'bg-white border-gray-200'
+                }`}
+              >
+                <img
+                  src={starIcon}
+                  alt='github-star-svg'
+                  width={16}
+                  height={16}
+                  className='mr-4pxr self-center'
+                />
+                <span className='text-15pxr text-gray-500'>
+                  {item.node.stargazers.totalCount.toLocaleString()}
+                </span>
+              </button>
+            </div>
+          ))}
       </section>
     </main>
   );
