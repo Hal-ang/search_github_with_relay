@@ -17,6 +17,7 @@ const Search = () => {
     >
       <header className='sticky top-0 bg-green-50 w-full py-20pxr flex justify-center'>
         <form
+          className='flex w-full'
           onSubmit={(e) => {
             e.preventDefault();
             setIsSearched(true);
@@ -26,13 +27,13 @@ const Search = () => {
             type='text'
             placeholder='검색어 입력'
             value={inputValue}
-            className={`border border-gray-300 focus:border-green-500 caret-green-500 rounded-md py-12pxr px-18pxr`}
+            className={`flex-1 border border-gray-300 focus:border-green-500 caret-green-500 rounded-md py-12pxr px-18pxr`}
             onChange={(e) => setInputValue(e.currentTarget.value)}
           />
           <input
             type='submit'
             value='검색'
-            className='ml-5pxr py-12pxr px-16pxr rounded-md bg-green-500 text-white hover:bg-green-600 cursor-pointer'
+            className='ml-5pxr py-12pxr px-16pxr rounded-md bg-[#00E600] text-white hover:bg-green-600 cursor-pointer'
           />
         </form>
       </header>
@@ -46,9 +47,9 @@ const Search = () => {
             ...result,
             ...result,
           ].map((item) => (
-            <div className='flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md'>
+            <div className='flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'>
               <a
-                target='__blank'
+                target='_blank'
                 href={item.node.url}
                 className='font-bold text-20pxr hover:underline'
               >
@@ -70,7 +71,7 @@ const Search = () => {
                   alt='github-star-svg'
                   width={16}
                   height={16}
-                  className='mr-4pxr self-center'
+                  className='mr-4pxr self-center '
                 />
                 <span className='text-15pxr text-gray-500'>
                   {item.node.stargazers.totalCount.toLocaleString()}
@@ -82,5 +83,4 @@ const Search = () => {
     </main>
   );
 };
-
 export default Search;
