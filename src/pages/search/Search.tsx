@@ -1,33 +1,75 @@
-import React, { useMemo, useState, useTransition } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  useTransition,
+} from 'react';
+import type {
+  searchRepositoryQuery,
+  searchRepositoryQuery$data,
+} from '../../graphql/queries/__generated__/searchRepositoryQuery.graphql';
 
 import { MutatingDots } from 'react-loader-spinner';
 import { SearchRepositoryQuery } from '../../graphql/queries/search';
-import type { searchRepositoryQuery } from '../../graphql/queries/__generated__/searchRepositoryQuery.graphql';
 import starIcon from '../../assets/star.svg';
 import { useLazyLoadQuery } from 'react-relay';
+
+type SearchItemType = Exclude<
+  searchRepositoryQuery$data['search']['edges'],
+  null | undefined
+>[0];
 
 const Search = () => {
   const [inputValue, setInputValue] = useState('');
   const [isSearched, setIsSearched] = useState(false);
 
   const [query, setQuery] = useState('');
-  const [after, setAfter] = useState(null);
+  const [after, setAfter] = useState<string | null>(null);
 
-  const [isPending, startTransition] = useTransition();
+  const [isPendingQueryResult, startTransitionQuery] = useTransition();
+  const [isPendingAfter, startTransitionAfter] = useTransition();
+
+  const [searchList, setSearchList] = useState<SearchItemType[]>([]);
 
   const searchedData = useLazyLoadQuery<searchRepositoryQuery>(
     SearchRepositoryQuery,
     { query, after }
   );
 
-  const searchList = useMemo(
-    () => searchedData?.search?.edges ?? [],
-    [searchedData]
-  );
+  useEffect(() => {
+    if (!searchedData) return;
+    setSearchList((prev) => [...prev, ...(searchedData?.search?.edges ?? [])]);
+  }, [searchedData]);
+
   const { hasNextPage, endCursor } = useMemo(
     () => searchedData?.search?.pageInfo,
     [searchedData]
   );
+
+  const footerRef = useRef<HTMLDivElement | null>(null);
+
+  const observer = useMemo(
+    () =>
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          if (isPendingQueryResult || !endCursor || !hasNextPage) return;
+
+          startTransitionAfter(() => {
+            setAfter(endCursor);
+            observer.disconnect();
+          });
+        });
+      }),
+    [isPendingQueryResult, isPendingAfter, hasNextPage]
+  );
+
+  useEffect(() => {
+    if (!footerRef.current) return;
+
+    observer.observe(footerRef.current);
+  }, [endCursor]);
 
   return (
     <main
@@ -41,9 +83,12 @@ const Search = () => {
           onSubmit={(e) => {
             e.preventDefault();
             setIsSearched(true);
-            startTransition(() => {
-              setQuery(inputValue);
-            });
+
+            if (query !== inputValue) {
+              startTransitionQuery(() => {
+                setQuery(inputValue);
+              });
+            }
           }}
         >
           <input
@@ -61,7 +106,7 @@ const Search = () => {
         </form>
       </header>
       <section className={`w-full mt-30pxr pb-50pxr ${isSearched && 'h-full'}`}>
-        {isPending ? (
+        {isPendingQueryResult ? (
           <div className='flex flex-col justify-center items-center mt-50pxr'>
             <MutatingDots
               height='100'
@@ -105,7 +150,7 @@ const Search = () => {
                   alt='github-star-svg'
                   width={16}
                   height={16}
-                  className='mr-4pxr self-center '
+                  className='mr-4pxr self-center'
                 />
                 <span className='text-15pxr text-gray-500'>
                   {item?.node?.stargazers?.totalCount.toLocaleString()}
@@ -114,6 +159,21 @@ const Search = () => {
             </div>
           ))
         ) : null}
+        {hasNextPage && (
+          <div ref={footerRef}>
+            {isPendingAfter && (
+              <MutatingDots
+                height='100'
+                width='100'
+                color='#4fa94d'
+                secondaryColor='#4fa94d'
+                radius='12.5'
+                ariaLabel='mutating-dots-loading'
+                visible
+              />
+            )}
+          </div>
+        )}
       </section>
     </main>
   );
