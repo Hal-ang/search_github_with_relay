@@ -1,5 +1,6 @@
 import React, { useMemo, useState, useTransition } from 'react';
 
+import { MutatingDots } from 'react-loader-spinner';
 import { SearchRepositoryQuery } from '../../graphql/queries/search';
 import type { searchRepositoryQuery } from '../../graphql/queries/__generated__/searchRepositoryQuery.graphql';
 import starIcon from '../../assets/star.svg';
@@ -59,14 +60,27 @@ const Search = () => {
           />
         </form>
       </header>
-      <section className='mt-30pxr pb-50pxr'>
+      <section className={`w-full mt-30pxr pb-50pxr ${isSearched && 'h-full'}`}>
         {isPending ? (
-          <div>loading...</div>
+          <div className='h-full flex flex-col justify-center items-center '>
+            <MutatingDots
+              height='100'
+              width='100'
+              color='#4fa94d'
+              secondaryColor='#4fa94d'
+              radius='12.5'
+              ariaLabel='mutating-dots-loading'
+              visible
+            />
+            <p className='mt-30pxr text-13pxr font-bold text-gray-600'>
+              열심히 검색 중입니다...
+            </p>
+          </div>
         ) : isSearched ? (
           searchList.map((item) => (
             <div
               key={`${item?.node?.id}-${item?.node?.stargazers?.totalCount}`}
-              className='flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'
+              className='w-full flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'
             >
               <a
                 target='_blank'
