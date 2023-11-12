@@ -46,6 +46,7 @@
     ]
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.201",
     "@types/react-relay": "^16.0.2",
     "@types/relay-runtime": "^14.1.17",
     "babel-plugin-relay": "^16.0.0",
