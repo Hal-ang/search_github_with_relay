@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<26a26b42f26a57285d923fd41eee2b30>>
+ * @generated SignedSource<<82cf49cbab56d912314bed7124da9eea>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -11,13 +11,11 @@
 import { ConcreteRequest, Query } from 'relay-runtime';
 export type searchRepositoryQuery$variables = {
   after?: string | null | undefined;
-  first?: number | null | undefined;
   query: string;
 };
 export type searchRepositoryQuery$data = {
   readonly search: {
     readonly edges: ReadonlyArray<{
-      readonly cursor: string;
       readonly node: {
         readonly description?: string | null | undefined;
         readonly id?: string;
@@ -29,6 +27,10 @@ export type searchRepositoryQuery$data = {
         readonly viewerHasStarred?: boolean;
       } | null | undefined;
     } | null | undefined> | null | undefined;
+    readonly pageInfo: {
+      readonly endCursor: string | null | undefined;
+      readonly hasNextPage: boolean;
+    };
   };
 };
 export type searchRepositoryQuery = {
@@ -45,23 +47,18 @@ var v0 = {
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "first"
-},
-v2 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
   "name": "query"
 },
-v3 = [
+v2 = [
   {
     "kind": "Variable",
     "name": "after",
     "variableName": "after"
   },
   {
-    "kind": "Variable",
+    "kind": "Literal",
     "name": "first",
-    "variableName": "first"
+    "value": 10
   },
   {
     "kind": "Variable",
@@ -74,24 +71,42 @@ v3 = [
     "value": "REPOSITORY"
   }
 ],
-v4 = {
+v3 = {
   "alias": null,
   "args": null,
-  "kind": "ScalarField",
-  "name": "cursor",
+  "concreteType": "PageInfo",
+  "kind": "LinkedField",
+  "name": "pageInfo",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "endCursor",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "hasNextPage",
+      "storageKey": null
+    }
+  ],
   "storageKey": null
 },
-v5 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
 },
-v6 = {
+v5 = {
   "kind": "InlineFragment",
   "selections": [
-    (v5/*: any*/),
+    (v4/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -146,8 +161,7 @@ return {
   "fragment": {
     "argumentDefinitions": [
       (v0/*: any*/),
-      (v1/*: any*/),
-      (v2/*: any*/)
+      (v1/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
@@ -155,12 +169,13 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v3/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "SearchResultItemConnection",
         "kind": "LinkedField",
         "name": "search",
         "plural": false,
         "selections": [
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -169,7 +184,6 @@ return {
             "name": "edges",
             "plural": true,
             "selections": [
-              (v4/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -178,7 +192,7 @@ return {
                 "name": "node",
                 "plural": false,
                 "selections": [
-                  (v6/*: any*/)
+                  (v5/*: any*/)
                 ],
                 "storageKey": null
               }
@@ -195,7 +209,6 @@ return {
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
-      (v2/*: any*/),
       (v1/*: any*/),
       (v0/*: any*/)
     ],
@@ -204,12 +217,13 @@ return {
     "selections": [
       {
         "alias": null,
-        "args": (v3/*: any*/),
+        "args": (v2/*: any*/),
         "concreteType": "SearchResultItemConnection",
         "kind": "LinkedField",
         "name": "search",
         "plural": false,
         "selections": [
+          (v3/*: any*/),
           {
             "alias": null,
             "args": null,
@@ -218,7 +232,6 @@ return {
             "name": "edges",
             "plural": true,
             "selections": [
-              (v4/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -234,11 +247,11 @@ return {
                     "name": "__typename",
                     "storageKey": null
                   },
-                  (v6/*: any*/),
+                  (v5/*: any*/),
                   {
                     "kind": "InlineFragment",
                     "selections": [
-                      (v5/*: any*/)
+                      (v4/*: any*/)
                     ],
                     "type": "Node",
                     "abstractKey": "__isNode"
@@ -255,16 +268,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "c52ec79826e9c7c9c32a799d2018bdd3",
+    "cacheID": "8cc05e13a740cc52f4bbfed65d2ac3a4",
     "id": null,
     "metadata": {},
     "name": "searchRepositoryQuery",
     "operationKind": "query",
-    "text": "query searchRepositoryQuery(\n  $query: String!\n  $first: Int\n  $after: String\n) {\n  search(query: $query, first: $first, after: $after, type: REPOSITORY) {\n    edges {\n      cursor\n      node {\n        __typename\n        ... on Repository {\n          id\n          name\n          url\n          description\n          viewerHasStarred\n          stargazers {\n            totalCount\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query searchRepositoryQuery(\n  $query: String!\n  $after: String\n) {\n  search(query: $query, first: 10, after: $after, type: REPOSITORY) {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      node {\n        __typename\n        ... on Repository {\n          id\n          name\n          url\n          description\n          viewerHasStarred\n          stargazers {\n            totalCount\n          }\n        }\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "cf73b7e74b1be1e3c63e971fa02588f6";
+(node as any).hash = "18a75be79367259f4060d01388cdca2e";
 
 export default node;

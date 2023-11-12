@@ -1,10 +1,13 @@
-import { graphql } from 'relay-runtime';
+import graphql from 'babel-plugin-relay/macro';
 
 export const SearchRepositoryQuery = graphql`
-  query searchRepositoryQuery($query: String!, $first: Int, $after: String) {
-    search(query: $query, first: $first, after: $after, type: REPOSITORY) {
+  query searchRepositoryQuery($query: String!, $after: String) {
+    search(query: $query, first: 10, after: $after, type: REPOSITORY) {
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
       edges {
-        cursor
         node {
           ... on Repository {
             id
