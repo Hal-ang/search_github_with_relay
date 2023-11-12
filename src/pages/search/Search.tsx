@@ -47,7 +47,10 @@ const Search = () => {
             ...result,
             ...result,
           ].map((item) => (
-            <div className='flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'>
+            <div
+              key={`${item.node.id}-${item.node.stargazers.totalCount}`}
+              className='flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'
+            >
               <a
                 target='_blank'
                 href={item.node.url}
