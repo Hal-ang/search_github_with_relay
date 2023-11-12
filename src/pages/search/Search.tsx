@@ -62,7 +62,7 @@ const Search = () => {
       </header>
       <section className={`w-full mt-30pxr pb-50pxr ${isSearched && 'h-full'}`}>
         {isPending ? (
-          <div className='h-full flex flex-col justify-center items-center '>
+          <div className='flex flex-col justify-center items-center mt-50pxr'>
             <MutatingDots
               height='100'
               width='100'
