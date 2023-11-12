@@ -1,14 +1,32 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState, useTransition } from 'react';
 
-import { SEARCH_LIST } from '../../mock/searchList';
+import { SearchRepositoryQuery } from '../../graphql/queries/search';
+import type { searchRepositoryQuery } from '../../graphql/queries/__generated__/searchRepositoryQuery.graphql';
 import starIcon from '../../assets/star.svg';
-
-const result = SEARCH_LIST.data.search.edges;
+import { useLazyLoadQuery } from 'react-relay';
 
 const Search = () => {
   const [inputValue, setInputValue] = useState('');
-
   const [isSearched, setIsSearched] = useState(false);
+
+  const [query, setQuery] = useState('');
+  const [after, setAfter] = useState(null);
+
+  const [isPending, startTransition] = useTransition();
+
+  const searchedData = useLazyLoadQuery<searchRepositoryQuery>(
+    SearchRepositoryQuery,
+    { query, after }
+  );
+
+  const searchList = useMemo(
+    () => searchedData?.search?.edges ?? [],
+    [searchedData]
+  );
+  const { hasNextPage, endCursor } = useMemo(
+    () => searchedData?.search?.pageInfo,
+    [searchedData]
+  );
 
   return (
     <main
@@ -22,6 +40,9 @@ const Search = () => {
           onSubmit={(e) => {
             e.preventDefault();
             setIsSearched(true);
+            startTransition(() => {
+              setQuery(inputValue);
+            });
           }}
         >
           <input
@@ -39,33 +60,28 @@ const Search = () => {
         </form>
       </header>
       <section className='mt-30pxr pb-50pxr'>
-        {isSearched &&
-          [
-            ...result,
-            ...result,
-            ...result,
-            ...result,
-            ...result,
-            ...result,
-          ].map((item) => (
+        {isPending ? (
+          <div>loading...</div>
+        ) : isSearched ? (
+          searchList.map((item) => (
             <div
-              key={`${item.node.id}-${item.node.stargazers.totalCount}`}
+              key={`${item?.node?.id}-${item?.node?.stargazers?.totalCount}`}
               className='flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'
             >
               <a
                 target='_blank'
-                href={item.node.url}
+                href={item?.node?.url}
                 className='font-bold text-20pxr hover:underline'
               >
-                {item.node.name}
+                {item?.node?.name}
               </a>
               <p className='text-gray-500 text-15pxr line-clamp-2'>
-                {item.node.description}
+                {item?.node?.description}
               </p>
               <button
                 onClick={() => console.log('click star button')}
                 className={`mt-5pxr flex flew-row item-center py-5pxr px-8pxr rounded-md hover:bg-green-100 border ${
-                  item.node.viewerHasStarred
+                  item?.node?.viewerHasStarred
                     ? 'bg-green-50 border-green-400'
                     : 'bg-white border-gray-200'
                 }`}
@@ -78,11 +94,12 @@ const Search = () => {
                   className='mr-4pxr self-center '
                 />
                 <span className='text-15pxr text-gray-500'>
-                  {item.node.stargazers.totalCount.toLocaleString()}
+                  {item?.node?.stargazers?.totalCount.toLocaleString()}
                 </span>
               </button>
             </div>
-          ))}
+          ))
+        ) : null}
       </section>
     </main>
   );
