@@ -4,6 +4,7 @@ import { SEARCH_LIST } from '../../mock/searchList';
 import starIcon from '../../assets/star.svg';
 
 const result = SEARCH_LIST.data.search.edges;
+
 const Search = () => {
   const [inputValue, setInputValue] = useState('');
 
