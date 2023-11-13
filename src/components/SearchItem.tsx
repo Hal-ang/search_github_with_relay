@@ -1,24 +1,50 @@
-import ButtonWithIcon from './Button';
-import React from 'react';
-import { SearchNodeType } from '../types/search';
-import starIcon from '../assets/star.svg';
+import React, { useMemo } from 'react';
 
-const SearchItem = React.memo(
-  ({ item }: { item: SearchNodeType }) => (
+import ButtonWithIcon from './Button';
+import { SearchItem_repository$key } from './__generated__/SearchItem_repository.graphql';
+import graphql from 'babel-plugin-relay/macro';
+import starIcon from '../assets/star.svg';
+import { useFragment } from 'react-relay';
+
+type Props = {
+  data: SearchItem_repository$key;
+};
+
+const SearchItem = (props: Props) => {
+  const data = useFragment(
+    graphql`
+      fragment SearchItem_repository on Repository {
+        id
+        name
+        url
+        description
+        viewerHasStarred
+        stargazers {
+          totalCount
+        }
+      }
+    `,
+    props.data
+  );
+
+  const { url, name, description, viewerHasStarred, stargazers } = useMemo(
+    () => data,
+    [data]
+  );
+
+  return (
     <div className='w-full flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'>
       <a
         target='_blank'
-        href={item.url}
+        href={url}
         rel='noreferrer'
         className='font-bold text-20pxr hover:underline'
       >
-        {item.name}
+        {name}
       </a>
-      <p className='text-gray-500 text-15pxr line-clamp-2'>
-        {item.description}
-      </p>
+      <p className='text-gray-500 text-15pxr line-clamp-2'>{description}</p>
       <ButtonWithIcon
-        selected={item.viewerHasStarred ?? false}
+        selected={viewerHasStarred ?? false}
         onClick={() => console.log('click star button')}
         LeftIcon={
           <img
@@ -29,13 +55,10 @@ const SearchItem = React.memo(
             className='mr-4pxr self-center'
           />
         }
-        text={item.stargazers?.totalCount?.toString() ?? ''}
+        text={stargazers?.totalCount?.toString() ?? ''}
       />
     </div>
-  ),
-  ({ item: prevItem }, { item: nextItem }) =>
-    prevItem.id === nextItem.id &&
-    prevItem.viewerHasStarred === nextItem.viewerHasStarred
-);
+  );
+};
 
 export default SearchItem;

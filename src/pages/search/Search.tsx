@@ -7,16 +7,13 @@ import React, {
   useTransition,
 } from 'react';
 
-import { SearchEdgeType } from '../../types/search';
-import SearchItem from '../../components/SearchItem';
-import { SearchRepositoryQuery } from '../../graphql/queries/search';
+import SearchList from '../../components/SearchList';
+import { SearchParentComponentQuery } from './__generated__/SearchParentComponentQuery.graphql';
 import Spinner from '../../components/Spinner';
-import type { searchRepositoryQuery } from '../../graphql/queries/__generated__/searchRepositoryQuery.graphql';
+import graphql from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay';
 
 const Search = () => {
-  const footerRef = useRef<HTMLDivElement | null>(null);
-
   const [inputValue, setInputValue] = useState('');
   const [isSearched, setIsSearched] = useState(false);
 
@@ -24,51 +21,20 @@ const Search = () => {
   const [after, setAfter] = useState<string | null>(null);
 
   const [isPendingQueryResult, startTransitionQuery] = useTransition();
-  const [isPendingAfterResult, startTransitionAfter] = useTransition();
 
-  const [searchList, setSearchList] = useState<SearchEdgeType[]>([]);
-
-  const searchedData = useLazyLoadQuery<searchRepositoryQuery>(
-    SearchRepositoryQuery,
-    { query, after }
+  const queryData = useLazyLoadQuery<SearchParentComponentQuery>(
+    graphql`
+      query SearchParentComponentQuery(
+        $query: String!
+        $after: String
+        $first: Int
+      ) {
+        ...SearchListComponent_query
+          @arguments(query: $query, after: $after, first: $first)
+      }
+    `,
+    { after: null, query, first: 10 }
   );
-
-  const { hasNextPage, endCursor } = useMemo(
-    () => searchedData?.search?.pageInfo,
-    [searchedData]
-  );
-
-  useEffect(() => {
-    if (!searchedData) return;
-
-    setSearchList((prev) => [...prev, ...(searchedData?.search?.edges ?? [])]);
-  }, [searchedData]);
-
-  const observerAndLoadMore: IntersectionObserverCallback = useCallback(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        if (isPendingQueryResult || !endCursor || !hasNextPage) return;
-
-        startTransitionAfter(() => {
-          setAfter(endCursor);
-          observer.disconnect();
-        });
-      });
-    },
-    [isPendingQueryResult, endCursor, hasNextPage]
-  );
-
-  const observer = useMemo(
-    () => new IntersectionObserver(observerAndLoadMore),
-    [observerAndLoadMore]
-  );
-
-  useEffect(() => {
-    if (!footerRef.current) return;
-
-    observer.observe(footerRef.current);
-  }, [endCursor]);
 
   const resetAndInitiateSearch = useCallback(() => {
     if (query === inputValue) return;
@@ -114,26 +80,11 @@ const Search = () => {
         {isPendingQueryResult ? (
           <Spinner className='mt-50pxr' text='열심히 검색 중입니다...' />
         ) : isSearched ? (
-          searchList.map((item) => {
-            if (!item?.node) return null;
-            const { node } = item;
-            const { id, stargazers, viewerHasStarred } = node;
-
-            return (
-              <SearchItem
-                key={`${id}-${stargazers?.totalCount}-${viewerHasStarred}`}
-                item={node}
-              />
-            );
-          })
+          <SearchList data={queryData} />
         ) : null}
-        {hasNextPage && !isPendingQueryResult && (
-          <footer ref={footerRef} className='w-full pt-20pxr'>
-            {isPendingAfterResult && <Spinner width='80' height='80' />}
-          </footer>
-        )}
       </section>
     </main>
   );
 };
+
 export default Search;
