@@ -24,7 +24,7 @@ const Search = () => {
   const [after, setAfter] = useState<string | null>(null);
 
   const [isPendingQueryResult, startTransitionQuery] = useTransition();
-  const [isPendingAfter, startTransitionAfter] = useTransition();
+  const [isPendingAfterResult, startTransitionAfter] = useTransition();
 
   const [searchList, setSearchList] = useState<SearchEdgeType[]>([]);
 
@@ -33,16 +33,16 @@ const Search = () => {
     { query, after }
   );
 
+  const { hasNextPage, endCursor } = useMemo(
+    () => searchedData?.search?.pageInfo,
+    [searchedData]
+  );
+
   useEffect(() => {
     if (!searchedData) return;
 
     setSearchList((prev) => [...prev, ...(searchedData?.search?.edges ?? [])]);
   }, [searchedData]);
-
-  const { hasNextPage, endCursor } = useMemo(
-    () => searchedData?.search?.pageInfo,
-    [searchedData]
-  );
 
   const observerAndLoadMore: IntersectionObserverCallback = useCallback(
     (entries) => {
@@ -89,6 +89,7 @@ const Search = () => {
         <form
           className='flex w-full'
           onSubmit={(e) => {
+            if (isPendingQueryResult) return;
             e.preventDefault();
             setIsSearched(true);
 
@@ -99,7 +100,7 @@ const Search = () => {
             type='text'
             placeholder='검색어 입력'
             value={inputValue}
-            className={`flex-1 border border-gray-300 focus:border-green-500 caret-green-500 rounded-md py-12pxr px-18pxr`}
+            className='flex-1 border border-gray-300 focus:border-green-500 caret-green-500 rounded-md py-12pxr px-18pxr'
             onChange={(e) => setInputValue(e.currentTarget.value)}
           />
           <input
@@ -128,7 +129,7 @@ const Search = () => {
         ) : null}
         {hasNextPage && !isPendingQueryResult && (
           <footer ref={footerRef} className='w-full pt-20pxr'>
-            {isPendingAfter && <Spinner width='80' height='80' />}
+            {isPendingAfterResult && <Spinner width='80' height='80' />}
           </footer>
         )}
       </section>
