@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<f91a8b8bb897d281cff154a9574aa051>>
+ * @generated SignedSource<<f3f5da6275b2736b02ee7d33a01e26ff>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -149,6 +149,13 @@ return {
               {
                 "alias": null,
                 "args": null,
+                "kind": "ScalarField",
+                "name": "cursor",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
                 "concreteType": null,
                 "kind": "LinkedField",
                 "name": "node",
@@ -225,13 +232,6 @@ return {
                   }
                 ],
                 "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "cursor",
-                "storageKey": null
               }
             ],
             "storageKey": null
@@ -254,12 +254,12 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1f65fad8f75c4ce4b68ee5c28d0fe096",
+    "cacheID": "1297f81b1d93ca238bceee6bbddb615b",
     "id": null,
     "metadata": {},
     "name": "SearchParentComponentQuery",
     "operationKind": "query",
-    "text": "query SearchParentComponentQuery(\n  $query: String!\n  $after: String\n  $first: Int\n) {\n  ...SearchListComponent_query_1Tyy4D\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_1Tyy4D on Query {\n  search(first: $first, after: $after, query: $query, type: REPOSITORY) {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      cursor\n    }\n  }\n}\n"
+    "text": "query SearchParentComponentQuery(\n  $query: String!\n  $after: String\n  $first: Int\n) {\n  ...SearchListComponent_query_1Tyy4D\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_1Tyy4D on Query {\n  search(first: $first, after: $after, query: $query, type: REPOSITORY) {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      cursor\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();

@@ -1,11 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  useTransition,
-} from 'react';
+import React, { useCallback, useState, useTransition } from 'react';
 
 import SearchList from '../../components/SearchList';
 import { SearchParentComponentQuery } from './__generated__/SearchParentComponentQuery.graphql';
@@ -16,10 +9,7 @@ import { useLazyLoadQuery } from 'react-relay';
 const Search = () => {
   const [inputValue, setInputValue] = useState('');
   const [isSearched, setIsSearched] = useState(false);
-
   const [query, setQuery] = useState<string>('');
-  const [after, setAfter] = useState<string | null>(null);
-
   const [isPendingQueryResult, startTransitionQuery] = useTransition();
 
   const queryData = useLazyLoadQuery<SearchParentComponentQuery>(
@@ -41,7 +31,6 @@ const Search = () => {
 
     startTransitionQuery(() => {
       setQuery(inputValue);
-      setAfter(null);
     });
   }, [query, inputValue]);
 

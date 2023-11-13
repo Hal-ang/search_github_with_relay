@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a492d3703c4afc42c8e208a96c52d596>>
+ * @generated SignedSource<<dd187d5ebda85fc6f2f07b1748bc24d0>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -13,6 +13,7 @@ import { FragmentRefs } from "relay-runtime";
 export type SearchListComponent_query$data = {
   readonly search: {
     readonly edges: ReadonlyArray<{
+      readonly cursor: string;
       readonly node: {
         readonly " $fragmentSpreads": FragmentRefs<"SearchItem_repository">;
       } | null | undefined;
@@ -131,6 +132,13 @@ return {
             {
               "alias": null,
               "args": null,
+              "kind": "ScalarField",
+              "name": "cursor",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
               "concreteType": null,
               "kind": "LinkedField",
               "name": "node",
@@ -150,13 +158,6 @@ return {
                 }
               ],
               "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "cursor",
-              "storageKey": null
             }
           ],
           "storageKey": null
@@ -170,6 +171,6 @@ return {
 };
 })();
 
-(node as any).hash = "669a32c87a7b05b751954e05276cc92e";
+(node as any).hash = "c3b1d9e508747255bc7b67378a79b3c3";
 
 export default node;

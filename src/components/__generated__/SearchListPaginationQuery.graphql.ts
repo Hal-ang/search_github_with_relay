@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<fa94874f8423c48e4d2dff8b3b5b73f3>>
+ * @generated SignedSource<<d3cb7cd7c3c2ee43e7b8d87b10e20321>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -143,6 +143,13 @@ return {
               {
                 "alias": null,
                 "args": null,
+                "kind": "ScalarField",
+                "name": "cursor",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
                 "concreteType": null,
                 "kind": "LinkedField",
                 "name": "node",
@@ -219,13 +226,6 @@ return {
                   }
                 ],
                 "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "cursor",
-                "storageKey": null
               }
             ],
             "storageKey": null
@@ -248,16 +248,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "6db011b6aeccacfd416e8b4ca009bb2d",
+    "cacheID": "75150f6a4b11381ab5ab606188384858",
     "id": null,
     "metadata": {},
     "name": "SearchListPaginationQuery",
     "operationKind": "query",
-    "text": "query SearchListPaginationQuery(\n  $after: String\n  $first: Int\n  $query: String!\n) {\n  ...SearchListComponent_query_1Tyy4D\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_1Tyy4D on Query {\n  search(first: $first, after: $after, query: $query, type: REPOSITORY) {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n      cursor\n    }\n  }\n}\n"
+    "text": "query SearchListPaginationQuery(\n  $after: String\n  $first: Int\n  $query: String!\n) {\n  ...SearchListComponent_query_1Tyy4D\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_1Tyy4D on Query {\n  search(first: $first, after: $after, query: $query, type: REPOSITORY) {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      cursor\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "669a32c87a7b05b751954e05276cc92e";
+(node as any).hash = "c3b1d9e508747255bc7b67378a79b3c3";
 
 export default node;
