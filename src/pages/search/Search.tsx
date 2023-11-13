@@ -1,8 +1,10 @@
 import React, { useCallback, useState, useTransition } from 'react';
 
+import Input from '../../components/Input';
 import SearchList from '../../components/SearchList';
 import { SearchParentComponentQuery } from './__generated__/SearchParentComponentQuery.graphql';
 import Spinner from '../../components/Spinner';
+import Submit from '../../components/Submit';
 import graphql from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay';
 
@@ -51,18 +53,11 @@ const Search = () => {
             resetAndInitiateSearch();
           }}
         >
-          <input
-            type='text'
-            placeholder='검색어 입력'
+          <Input
             value={inputValue}
-            className='flex-1 border border-gray-300 focus:border-green-500 caret-green-500 rounded-md py-12pxr px-18pxr'
             onChange={(e) => setInputValue(e.currentTarget.value)}
           />
-          <input
-            type='submit'
-            value='검색'
-            className='ml-5pxr py-12pxr px-16pxr rounded-md bg-[#00E600] text-white hover:bg-green-600 cursor-pointer'
-          />
+          <Submit className='ml-5pxr' />
         </form>
       </header>
       <section className={`w-full mt-30pxr pb-50pxr ${isSearched && 'h-full'}`}>
