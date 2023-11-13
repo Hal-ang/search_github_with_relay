@@ -5,32 +5,25 @@ import React, {
   useState,
   useTransition,
 } from 'react';
-import type {
-  searchRepositoryQuery,
-  searchRepositoryQuery$data,
-} from '../../graphql/queries/__generated__/searchRepositoryQuery.graphql';
 
-import { MutatingDots } from 'react-loader-spinner';
+import { SearchEdgeType } from '../../types/search';
+import SearchItem from '../../components/SearchItem';
 import { SearchRepositoryQuery } from '../../graphql/queries/search';
-import starIcon from '../../assets/star.svg';
+import Spinner from '../../components/Spinner';
+import type { searchRepositoryQuery } from '../../graphql/queries/__generated__/searchRepositoryQuery.graphql';
 import { useLazyLoadQuery } from 'react-relay';
-
-type SearchItemType = Exclude<
-  searchRepositoryQuery$data['search']['edges'],
-  null | undefined
->[0];
 
 const Search = () => {
   const [inputValue, setInputValue] = useState('');
   const [isSearched, setIsSearched] = useState(false);
 
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState<string>('');
   const [after, setAfter] = useState<string | null>(null);
 
   const [isPendingQueryResult, startTransitionQuery] = useTransition();
   const [isPendingAfter, startTransitionAfter] = useTransition();
 
-  const [searchList, setSearchList] = useState<SearchItemType[]>([]);
+  const [searchList, setSearchList] = useState<SearchEdgeType[]>([]);
 
   const searchedData = useLazyLoadQuery<searchRepositoryQuery>(
     SearchRepositoryQuery,
@@ -39,6 +32,7 @@ const Search = () => {
 
   useEffect(() => {
     if (!searchedData) return;
+
     setSearchList((prev) => [...prev, ...(searchedData?.search?.edges ?? [])]);
   }, [searchedData]);
 
@@ -107,72 +101,25 @@ const Search = () => {
       </header>
       <section className={`w-full mt-30pxr pb-50pxr ${isSearched && 'h-full'}`}>
         {isPendingQueryResult ? (
-          <div className='flex flex-col justify-center items-center mt-50pxr'>
-            <MutatingDots
-              height='100'
-              width='100'
-              color='#4fa94d'
-              secondaryColor='#4fa94d'
-              radius='12.5'
-              ariaLabel='mutating-dots-loading'
-              visible
-            />
-            <p className='mt-30pxr text-13pxr font-bold text-gray-600'>
-              열심히 검색 중입니다...
-            </p>
-          </div>
+          <Spinner className='mt-50pxr' text='열심히 검색 중입니다...' />
         ) : isSearched ? (
-          searchList.map((item) => (
-            <div
-              key={`${item?.node?.id}-${item?.node?.stargazers?.totalCount}`}
-              className='w-full flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'
-            >
-              <a
-                target='_blank'
-                href={item?.node?.url}
-                className='font-bold text-20pxr hover:underline'
-              >
-                {item?.node?.name}
-              </a>
-              <p className='text-gray-500 text-15pxr line-clamp-2'>
-                {item?.node?.description}
-              </p>
-              <button
-                onClick={() => console.log('click star button')}
-                className={`mt-5pxr flex flew-row item-center py-5pxr px-8pxr rounded-md hover:bg-green-100 border ${
-                  item?.node?.viewerHasStarred
-                    ? 'bg-green-50 border-green-400'
-                    : 'bg-white border-gray-200'
-                }`}
-              >
-                <img
-                  src={starIcon}
-                  alt='github-star-svg'
-                  width={16}
-                  height={16}
-                  className='mr-4pxr self-center'
-                />
-                <span className='text-15pxr text-gray-500'>
-                  {item?.node?.stargazers?.totalCount.toLocaleString()}
-                </span>
-              </button>
-            </div>
-          ))
-        ) : null}
-        {hasNextPage && (
-          <div ref={footerRef}>
-            {isPendingAfter && (
-              <MutatingDots
-                height='100'
-                width='100'
-                color='#4fa94d'
-                secondaryColor='#4fa94d'
-                radius='12.5'
-                ariaLabel='mutating-dots-loading'
-                visible
+          searchList.map((item) => {
+            if (!item?.node) return null;
+            const { node } = item;
+            const { id, stargazers, viewerHasStarred } = node;
+
+            return (
+              <SearchItem
+                key={`${id}-${stargazers?.totalCount}-${viewerHasStarred}`}
+                item={node}
               />
-            )}
-          </div>
+            );
+          })
+        ) : null}
+        {hasNextPage && !isPendingQueryResult && (
+          <footer ref={footerRef} className='w-full pt-20pxr'>
+            {isPendingAfter && <Spinner width='80' height='80' />}
+          </footer>
         )}
       </section>
     </main>

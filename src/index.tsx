@@ -1,12 +1,13 @@
+import React, { Suspense } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
 import Main from './pages/Main';
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { RelayEnvironment } from './RelayEnvironment';
 import { RelayEnvironmentProvider } from 'react-relay';
 import Search from './pages/search/Search';
+import Spinner from './components/Spinner';
 import reportWebVitals from './reportWebVitals';
 
 const router = createBrowserRouter([
@@ -29,7 +30,16 @@ const root = ReactDOM.createRoot(
 root.render(
   <RelayEnvironmentProvider environment={RelayEnvironment}>
     <React.StrictMode>
-      <RouterProvider router={router} />
+      <Suspense
+        fallback={
+          <Spinner
+            className='w-full h-screen bg-green-50'
+            text='불러오는 중입니다..'
+          />
+        }
+      >
+        <RouterProvider router={router} />
+      </Suspense>
     </React.StrictMode>
   </RelayEnvironmentProvider>
 );
