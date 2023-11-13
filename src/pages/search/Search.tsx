@@ -1,4 +1,5 @@
 import React, {
+  useCallback,
   useEffect,
   useMemo,
   useRef,
@@ -14,6 +15,8 @@ import type { searchRepositoryQuery } from '../../graphql/queries/__generated__/
 import { useLazyLoadQuery } from 'react-relay';
 
 const Search = () => {
+  const footerRef = useRef<HTMLDivElement | null>(null);
+
   const [inputValue, setInputValue] = useState('');
   const [isSearched, setIsSearched] = useState(false);
 
@@ -41,22 +44,24 @@ const Search = () => {
     [searchedData]
   );
 
-  const footerRef = useRef<HTMLDivElement | null>(null);
+  const observerAndLoadMore: IntersectionObserverCallback = useCallback(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        if (isPendingQueryResult || !endCursor || !hasNextPage) return;
+
+        startTransitionAfter(() => {
+          setAfter(endCursor);
+          observer.disconnect();
+        });
+      });
+    },
+    [isPendingQueryResult, endCursor, hasNextPage]
+  );
 
   const observer = useMemo(
-    () =>
-      new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          if (isPendingQueryResult || !endCursor || !hasNextPage) return;
-
-          startTransitionAfter(() => {
-            setAfter(endCursor);
-            observer.disconnect();
-          });
-        });
-      }),
-    [isPendingQueryResult, isPendingAfter, hasNextPage]
+    () => new IntersectionObserver(observerAndLoadMore),
+    [observerAndLoadMore]
   );
 
   useEffect(() => {
@@ -64,6 +69,15 @@ const Search = () => {
 
     observer.observe(footerRef.current);
   }, [endCursor]);
+
+  const resetAndInitiateSearch = useCallback(() => {
+    if (query === inputValue) return;
+
+    startTransitionQuery(() => {
+      setQuery(inputValue);
+      setAfter(null);
+    });
+  }, [query, inputValue]);
 
   return (
     <main
@@ -78,11 +92,7 @@ const Search = () => {
             e.preventDefault();
             setIsSearched(true);
 
-            if (query !== inputValue) {
-              startTransitionQuery(() => {
-                setQuery(inputValue);
-              });
-            }
+            resetAndInitiateSearch();
           }}
         >
           <input
