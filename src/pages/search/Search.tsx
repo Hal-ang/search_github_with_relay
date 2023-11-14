@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useTransition } from 'react';
+import React, { Suspense, useCallback, useState, useTransition } from 'react';
 
 import Input from '../../components/Input';
 import SearchList from '../../components/SearchList';
@@ -16,16 +16,11 @@ const Search = () => {
 
   const queryData = useLazyLoadQuery<SearchParentComponentQuery>(
     graphql`
-      query SearchParentComponentQuery(
-        $query: String!
-        $after: String
-        $first: Int
-      ) {
-        ...SearchListComponent_query
-          @arguments(query: $query, after: $after, first: $first)
+      query SearchParentComponentQuery($query: String!, $first: Int) {
+        ...SearchListComponent_query @arguments(query: $query, first: $first)
       }
     `,
-    { after: null, query, first: 10 }
+    { query, first: 10 }
   );
 
   const resetAndInitiateSearch = useCallback(() => {
@@ -46,8 +41,8 @@ const Search = () => {
         <form
           className='flex w-full'
           onSubmit={(e) => {
-            if (isPendingQueryResult) return;
             e.preventDefault();
+            if (isPendingQueryResult) return;
             setIsSearched(true);
 
             resetAndInitiateSearch();

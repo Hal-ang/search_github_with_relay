@@ -7,6 +7,30 @@ import Spinner from './Spinner';
 import graphql from 'babel-plugin-relay/macro';
 import { usePaginationFragment } from 'react-relay';
 
+const SearchListComponentQuery = graphql`
+  fragment SearchListComponent_query on Query
+  @argumentDefinitions(
+    first: { type: "Int" }
+    after: { type: "String" }
+    query: { type: "String!" }
+  )
+  @refetchable(queryName: "SearchListPaginationQuery") {
+    search(first: $first, after: $after, query: $query, type: REPOSITORY)
+      @connection(key: "Query_search") {
+      pageInfo {
+        endCursor
+        hasNextPage
+      }
+      edges {
+        cursor
+        node {
+          ...SearchItem_repository
+        }
+      }
+    }
+  }
+`;
+
 const SearchList = (props: { data: SearchListComponent_query$key }) => {
   const bottomSpinnerRef = useRef<HTMLDivElement | null>(null);
   const {
@@ -14,32 +38,7 @@ const SearchList = (props: { data: SearchListComponent_query$key }) => {
     loadNext,
     isLoadingNext,
     hasNext,
-  } = usePaginationFragment(
-    graphql`
-      fragment SearchListComponent_query on Query
-      @argumentDefinitions(
-        first: { type: "Int" }
-        after: { type: "String" }
-        query: { type: "String!" }
-      )
-      @refetchable(queryName: "SearchListPaginationQuery") {
-        search(first: $first, after: $after, query: $query, type: REPOSITORY)
-          @connection(key: "Query_search") {
-          pageInfo {
-            endCursor
-            hasNextPage
-          }
-          edges {
-            cursor
-            node {
-              ...SearchItem_repository
-            }
-          }
-        }
-      }
-    `,
-    props.data
-  );
+  } = usePaginationFragment(SearchListComponentQuery, props.data);
 
   const observerAndLoadMore: IntersectionObserverCallback = useCallback(
     (entries) => {
@@ -75,7 +74,9 @@ const SearchList = (props: { data: SearchListComponent_query$key }) => {
     <>
       {edges.map((edge, index) => {
         if (!edge?.node) return null;
-        return <SearchItem key={`${edge.cursor}-${index}`} data={edge.node} />;
+        return (
+          <SearchItem key={`${edge.cursor}-${index}`} repository={edge.node} />
+        );
       })}
       {hasNext && (
         <section ref={bottomSpinnerRef} className='w-full mt-20pxr h-full'>

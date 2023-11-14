@@ -1,61 +1,71 @@
-import React, { useMemo } from 'react';
-import {
-  commitMutation,
-  createFragmentContainer,
-  useFragment,
-  useMutation,
-} from 'react-relay';
+import { useCallback, useMemo } from 'react';
+import { useFragment, useMutation } from 'react-relay';
 
 import ButtonWithIcon from './Button';
-import { RelayEnvironment } from '../RelayEnvironment';
 import { SearchItem_repository$key } from './__generated__/SearchItem_repository.graphql';
 import graphql from 'babel-plugin-relay/macro';
 import starIcon from '../assets/star.svg';
 
-type Props = {
-  data: SearchItem_repository$key;
-};
+const SearchItemRepositoryFragment = graphql`
+  fragment SearchItem_repository on Repository {
+    id
+    name
+    url
+    description
+    viewerHasStarred
+    stargazers {
+      totalCount
+    }
+  }
+`;
 
-const SearchItem = (props: Props) => {
-  const data = useFragment(
-    graphql`
-      fragment SearchItem_repository on Repository {
-        id
-        name
-        url
-        description
+const AddStarMutation = graphql`
+  mutation SearchItemAddStarMutation($input: AddStarInput!) {
+    addStar(input: $input) {
+      starrable {
         viewerHasStarred
-        stargazers {
-          totalCount
-        }
       }
-    `,
-    props.data
+    }
+  }
+`;
+
+const RemoveStarMutation = graphql`
+  mutation SearchItemRemoveStarMutation($input: RemoveStarInput!) {
+    removeStar(input: $input) {
+      starrable {
+        viewerHasStarred
+      }
+    }
+  }
+`;
+
+const SearchItem = (props: { repository: SearchItem_repository$key }) => {
+  const repository = useFragment(
+    SearchItemRepositoryFragment,
+    props.repository
   );
+
   const { id, url, name, description, viewerHasStarred, stargazers } = useMemo(
-    () => data,
-    [data]
+    () => repository,
+    [repository]
   );
 
-  const [addStarMutation] = useMutation(graphql`
-    mutation SearchItemAddStarMutation($input: AddStarInput!) {
-      addStar(input: $input) {
-        starrable {
-          viewerHasStarred
-        }
-      }
-    }
-  `);
+  const [addStarMutation] = useMutation(AddStarMutation);
+  const [removeStarMutation] = useMutation(RemoveStarMutation);
 
-  const [removeStarMutation] = useMutation(graphql`
-    mutation SearchItemRemoveStarMutation($input: RemoveStarInput!) {
-      removeStar(input: $input) {
-        starrable {
-          viewerHasStarred
-        }
-      }
-    }
-  `);
+  const toggleStarOnRepository = useCallback(() => {
+    const starMutation = viewerHasStarred
+      ? removeStarMutation
+      : addStarMutation;
+
+    starMutation({
+      variables: {
+        input: {
+          starrableId: id,
+        },
+      },
+    });
+  }, [viewerHasStarred, id, addStarMutation, removeStarMutation]);
 
   return (
     <div className='w-full flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'>
@@ -69,21 +79,8 @@ const SearchItem = (props: Props) => {
       </a>
       <p className='text-gray-500 text-15pxr line-clamp-2'>{description}</p>
       <ButtonWithIcon
-        selected={viewerHasStarred ?? false}
-        onClick={() => {
-          const variables = {
-            variables: {
-              input: {
-                starrableId: id,
-              },
-            },
-          };
-          const starMutation = viewerHasStarred
-            ? removeStarMutation
-            : addStarMutation;
-
-          starMutation(variables);
-        }}
+        selected={viewerHasStarred}
+        onClick={toggleStarOnRepository}
         LeftIcon={
           <img
             src={starIcon}
