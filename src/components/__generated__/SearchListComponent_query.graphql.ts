@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<dd187d5ebda85fc6f2f07b1748bc24d0>>
+ * @generated SignedSource<<da34a65895502c43b36e0a671dda1c60>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -18,10 +18,6 @@ export type SearchListComponent_query$data = {
         readonly " $fragmentSpreads": FragmentRefs<"SearchItem_repository">;
       } | null | undefined;
     } | null | undefined> | null | undefined;
-    readonly pageInfo: {
-      readonly endCursor: string | null | undefined;
-      readonly hasNextPage: boolean;
-    };
   };
   readonly " $fragmentType": "SearchListComponent_query";
 };
@@ -99,31 +95,6 @@ return {
         {
           "alias": null,
           "args": null,
-          "concreteType": "PageInfo",
-          "kind": "LinkedField",
-          "name": "pageInfo",
-          "plural": false,
-          "selections": [
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "endCursor",
-              "storageKey": null
-            },
-            {
-              "alias": null,
-              "args": null,
-              "kind": "ScalarField",
-              "name": "hasNextPage",
-              "storageKey": null
-            }
-          ],
-          "storageKey": null
-        },
-        {
-          "alias": null,
-          "args": null,
           "concreteType": "SearchResultItemEdge",
           "kind": "LinkedField",
           "name": "edges",
@@ -161,6 +132,31 @@ return {
             }
           ],
           "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "PageInfo",
+          "kind": "LinkedField",
+          "name": "pageInfo",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "endCursor",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "hasNextPage",
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
         }
       ],
       "storageKey": null
@@ -171,6 +167,6 @@ return {
 };
 })();
 
-(node as any).hash = "c3b1d9e508747255bc7b67378a79b3c3";
+(node as any).hash = "11865456bd16a17b4f221a16c7a05e21";
 
 export default node;

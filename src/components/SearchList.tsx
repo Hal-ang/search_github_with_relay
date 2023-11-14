@@ -17,10 +17,6 @@ const SearchListComponentQuery = graphql`
   @refetchable(queryName: "SearchListPaginationQuery") {
     search(first: $first, after: $after, query: $query, type: REPOSITORY)
       @connection(key: "Query_search") {
-      pageInfo {
-        endCursor
-        hasNextPage
-      }
       edges {
         cursor
         node {
@@ -31,14 +27,14 @@ const SearchListComponentQuery = graphql`
   }
 `;
 
-const SearchList = (props: { data: SearchListComponent_query$key }) => {
+const SearchList = (props: { repositories: SearchListComponent_query$key }) => {
   const bottomSpinnerRef = useRef<HTMLDivElement | null>(null);
   const {
     data: searchedData,
     loadNext,
     isLoadingNext,
     hasNext,
-  } = usePaginationFragment(SearchListComponentQuery, props.data);
+  } = usePaginationFragment(SearchListComponentQuery, props.repositories);
 
   const observerAndLoadMore: IntersectionObserverCallback = useCallback(
     (entries) => {

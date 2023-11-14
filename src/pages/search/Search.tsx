@@ -1,25 +1,27 @@
-import React, { Suspense, useCallback, useState, useTransition } from 'react';
+import React, { useCallback, useState, useTransition } from 'react';
 
 import Input from '../../components/Input';
 import SearchList from '../../components/SearchList';
-import { SearchParentComponentQuery } from './__generated__/SearchParentComponentQuery.graphql';
 import Spinner from '../../components/Spinner';
 import Submit from '../../components/Submit';
 import graphql from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay';
+import { SearchComponentQuery } from './__generated__/SearchComponentQuery.graphql';
+
+const SearchComponentQuery = graphql`
+  query SearchComponentQuery($query: String!, $first: Int) {
+    ...SearchListComponent_query @arguments(query: $query, first: $first)
+  }
+`;
 
 const Search = () => {
-  const [inputValue, setInputValue] = useState('');
   const [isSearched, setIsSearched] = useState(false);
+  const [inputValue, setInputValue] = useState('');
   const [query, setQuery] = useState<string>('');
   const [isPendingQueryResult, startTransitionQuery] = useTransition();
 
-  const queryData = useLazyLoadQuery<SearchParentComponentQuery>(
-    graphql`
-      query SearchParentComponentQuery($query: String!, $first: Int) {
-        ...SearchListComponent_query @arguments(query: $query, first: $first)
-      }
-    `,
+  const searchedRepositories = useLazyLoadQuery<SearchComponentQuery>(
+    SearchComponentQuery,
     { query, first: 10 }
   );
 
@@ -59,7 +61,7 @@ const Search = () => {
         {isPendingQueryResult ? (
           <Spinner className='mt-50pxr' text='열심히 검색 중입니다...' />
         ) : isSearched ? (
-          <SearchList data={queryData} />
+          <SearchList repositories={searchedRepositories} />
         ) : null}
       </section>
     </main>

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d3cb7cd7c3c2ee43e7b8d87b10e20321>>
+ * @generated SignedSource<<db8ff4f2eb8cf4ee18739d2c4aceb97d>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -110,31 +110,6 @@ return {
           {
             "alias": null,
             "args": null,
-            "concreteType": "PageInfo",
-            "kind": "LinkedField",
-            "name": "pageInfo",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "endCursor",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "hasNextPage",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
-          {
-            "alias": null,
-            "args": null,
             "concreteType": "SearchResultItemEdge",
             "kind": "LinkedField",
             "name": "edges",
@@ -229,6 +204,31 @@ return {
               }
             ],
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "PageInfo",
+            "kind": "LinkedField",
+            "name": "pageInfo",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "endCursor",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "hasNextPage",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -248,16 +248,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "75150f6a4b11381ab5ab606188384858",
+    "cacheID": "4b672871c7ed9dc4a933fbeb21170219",
     "id": null,
     "metadata": {},
     "name": "SearchListPaginationQuery",
     "operationKind": "query",
-    "text": "query SearchListPaginationQuery(\n  $after: String\n  $first: Int\n  $query: String!\n) {\n  ...SearchListComponent_query_1Tyy4D\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_1Tyy4D on Query {\n  search(first: $first, after: $after, query: $query, type: REPOSITORY) {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      cursor\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query SearchListPaginationQuery(\n  $after: String\n  $first: Int\n  $query: String!\n) {\n  ...SearchListComponent_query_1Tyy4D\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_1Tyy4D on Query {\n  search(first: $first, after: $after, query: $query, type: REPOSITORY) {\n    edges {\n      cursor\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c3b1d9e508747255bc7b67378a79b3c3";
+(node as any).hash = "11865456bd16a17b4f221a16c7a05e21";
 
 export default node;

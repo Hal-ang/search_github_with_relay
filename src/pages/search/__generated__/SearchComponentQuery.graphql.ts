@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<c2f5661b94e764c3eee0413f94581aef>>
+ * @generated SignedSource<<7424206939c5c4f48e7d895fa6e04fc6>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,16 +10,16 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type SearchParentComponentQuery$variables = {
+export type SearchComponentQuery$variables = {
   first?: number | null | undefined;
   query: string;
 };
-export type SearchParentComponentQuery$data = {
+export type SearchComponentQuery$data = {
   readonly " $fragmentSpreads": FragmentRefs<"SearchListComponent_query">;
 };
-export type SearchParentComponentQuery = {
-  response: SearchParentComponentQuery$data;
-  variables: SearchParentComponentQuery$variables;
+export type SearchComponentQuery = {
+  response: SearchComponentQuery$data;
+  variables: SearchComponentQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -67,7 +67,7 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "SearchParentComponentQuery",
+    "name": "SearchComponentQuery",
     "selections": [
       {
         "args": [
@@ -88,7 +88,7 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "SearchParentComponentQuery",
+    "name": "SearchComponentQuery",
     "selections": [
       {
         "alias": null,
@@ -98,31 +98,6 @@ return {
         "name": "search",
         "plural": false,
         "selections": [
-          {
-            "alias": null,
-            "args": null,
-            "concreteType": "PageInfo",
-            "kind": "LinkedField",
-            "name": "pageInfo",
-            "plural": false,
-            "selections": [
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "endCursor",
-                "storageKey": null
-              },
-              {
-                "alias": null,
-                "args": null,
-                "kind": "ScalarField",
-                "name": "hasNextPage",
-                "storageKey": null
-              }
-            ],
-            "storageKey": null
-          },
           {
             "alias": null,
             "args": null,
@@ -220,6 +195,31 @@ return {
               }
             ],
             "storageKey": null
+          },
+          {
+            "alias": null,
+            "args": null,
+            "concreteType": "PageInfo",
+            "kind": "LinkedField",
+            "name": "pageInfo",
+            "plural": false,
+            "selections": [
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "endCursor",
+                "storageKey": null
+              },
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "hasNextPage",
+                "storageKey": null
+              }
+            ],
+            "storageKey": null
           }
         ],
         "storageKey": null
@@ -239,16 +239,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "2da5ad9090ca0a6485b8ff1eafbb5ee3",
+    "cacheID": "a25bb0047d8aa7b3fbb2acbc3eff728e",
     "id": null,
     "metadata": {},
-    "name": "SearchParentComponentQuery",
+    "name": "SearchComponentQuery",
     "operationKind": "query",
-    "text": "query SearchParentComponentQuery(\n  $query: String!\n  $first: Int\n) {\n  ...SearchListComponent_query_ReqLQ\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_ReqLQ on Query {\n  search(first: $first, query: $query, type: REPOSITORY) {\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n    edges {\n      cursor\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n  }\n}\n"
+    "text": "query SearchComponentQuery(\n  $query: String!\n  $first: Int\n) {\n  ...SearchListComponent_query_ReqLQ\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_ReqLQ on Query {\n  search(first: $first, query: $query, type: REPOSITORY) {\n    edges {\n      cursor\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "4120c5faf14bf53c19e54723c0676d30";
+(node as any).hash = "8e653ff3beada77804a5599289bc35d5";
 
 export default node;
