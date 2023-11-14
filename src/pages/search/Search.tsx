@@ -18,7 +18,7 @@ const SearchPageQuery = graphql`
 const Search = () => {
   const [isSearched, setIsSearched] = useState(false);
   const [inputValue, setInputValue] = useState('');
-  const [query, setQuery] = useState<string>('');
+  const [query, setQuery] = useState('');
   const [isPendingQueryResult, startTransitionQuery] = useTransition();
 
   const searchedRepositories = useLazyLoadQuery<SearchPageQuery>(

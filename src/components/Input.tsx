@@ -3,9 +3,11 @@ import React from 'react';
 const Input = ({
   value,
   onChange,
+  ...attributes
 }: {
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  attributes?: React.InputHTMLAttributes<HTMLInputElement>;
 }) => {
   return (
     <input
@@ -14,6 +16,7 @@ const Input = ({
       value={value}
       className='flex-1 border border-gray-300 focus:border-green-500 caret-green-500 rounded-md py-12pxr px-18pxr'
       onChange={onChange}
+      {...attributes}
     />
   );
 };
