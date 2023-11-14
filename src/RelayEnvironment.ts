@@ -16,6 +16,7 @@ const fetchFn: FetchFunction = async (request, variables) => {
         'application/graphql-response+json; charset=utf-8, application/json; charset=utf-8',
       'Content-Type': 'application/json',
       Authorization: `bearer ${process.env.REACT_APP_GITHUB_AUTH_TOKEN}`,
+      'X-Github-Next-Global-ID': '1',
     },
     body: JSON.stringify({
       query: request.text, // <-- The GraphQL document composed by Relay

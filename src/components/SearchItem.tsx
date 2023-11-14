@@ -1,10 +1,16 @@
 import React, { useMemo } from 'react';
+import {
+  commitMutation,
+  createFragmentContainer,
+  useFragment,
+  useMutation,
+} from 'react-relay';
 
 import ButtonWithIcon from './Button';
+import { RelayEnvironment } from '../RelayEnvironment';
 import { SearchItem_repository$key } from './__generated__/SearchItem_repository.graphql';
 import graphql from 'babel-plugin-relay/macro';
 import starIcon from '../assets/star.svg';
-import { useFragment } from 'react-relay';
 
 type Props = {
   data: SearchItem_repository$key;
@@ -26,11 +32,30 @@ const SearchItem = (props: Props) => {
     `,
     props.data
   );
-
-  const { url, name, description, viewerHasStarred, stargazers } = useMemo(
+  const { id, url, name, description, viewerHasStarred, stargazers } = useMemo(
     () => data,
     [data]
   );
+
+  const [addStarMutation] = useMutation(graphql`
+    mutation SearchItemAddStarMutation($input: AddStarInput!) {
+      addStar(input: $input) {
+        starrable {
+          viewerHasStarred
+        }
+      }
+    }
+  `);
+
+  const [removeStarMutation] = useMutation(graphql`
+    mutation SearchItemRemoveStarMutation($input: RemoveStarInput!) {
+      removeStar(input: $input) {
+        starrable {
+          viewerHasStarred
+        }
+      }
+    }
+  `);
 
   return (
     <div className='w-full flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'>
@@ -45,7 +70,20 @@ const SearchItem = (props: Props) => {
       <p className='text-gray-500 text-15pxr line-clamp-2'>{description}</p>
       <ButtonWithIcon
         selected={viewerHasStarred ?? false}
-        onClick={() => console.log('click star button')}
+        onClick={() => {
+          const variables = {
+            variables: {
+              input: {
+                starrableId: id,
+              },
+            },
+          };
+          const starMutation = viewerHasStarred
+            ? removeStarMutation
+            : addStarMutation;
+
+          starMutation(variables);
+        }}
         LeftIcon={
           <img
             src={starIcon}
