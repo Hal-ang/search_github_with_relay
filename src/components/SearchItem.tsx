@@ -42,15 +42,15 @@ const RemoveStarMutation = graphql`
   }
 `;
 
-const SearchItem = (props: { repository: SearchItem_repository$key }) => {
-  const repository = useFragment(
+const SearchItem = (props: { item: SearchItem_repository$key }) => {
+  const searchedRepoData = useFragment(
     SearchItemRepositoryFragment,
-    props.repository
+    props.item
   );
 
   const { id, url, name, description, viewerHasStarred, stargazers } = useMemo(
-    () => repository,
-    [repository]
+    () => searchedRepoData,
+    [searchedRepoData]
   );
 
   const [addStarMutation, isAdding] = useMutation(AddStarMutation);

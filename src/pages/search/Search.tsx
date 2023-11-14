@@ -20,7 +20,7 @@ const Search = () => {
   const [query, setQuery] = useState('');
   const [isPendingQueryResult, startTransitionQuery] = useTransition();
 
-  const searchedRepositories = useLazyLoadQuery<SearchQuery>(SearchPageQuery, {
+  const searchedRepoList = useLazyLoadQuery<SearchQuery>(SearchPageQuery, {
     query,
     first: 10,
   });
@@ -63,7 +63,7 @@ const Search = () => {
         {isPendingQueryResult ? (
           <Spinner className='mt-50pxr' text='열심히 검색 중입니다...' />
         ) : isSearched ? (
-          <SearchList repositories={searchedRepositories} />
+          <SearchList list={searchedRepoList} />
         ) : null}
       </section>
     </main>

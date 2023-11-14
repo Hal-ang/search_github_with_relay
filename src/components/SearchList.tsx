@@ -27,14 +27,14 @@ const SearchListComponentQuery = graphql`
   }
 `;
 
-const SearchList = (props: { repositories: SearchListComponent_query$key }) => {
+const SearchList = (props: { list: SearchListComponent_query$key }) => {
   const bottomSpinnerRef = useRef<HTMLDivElement | null>(null);
   const {
-    data: searchedData,
+    data: searchedRepoList,
     loadNext,
     isLoadingNext,
     hasNext,
-  } = usePaginationFragment(SearchListComponentQuery, props.repositories);
+  } = usePaginationFragment(SearchListComponentQuery, props.list);
 
   const observerAndLoadMore: IntersectionObserverCallback = useCallback(
     (entries) => {
@@ -57,11 +57,11 @@ const SearchList = (props: { repositories: SearchListComponent_query$key }) => {
     if (!bottomSpinnerRef.current) return;
 
     observer.observe(bottomSpinnerRef.current);
-  }, [searchedData?.search?.edges]);
+  }, [searchedRepoList?.search?.edges]);
 
   const edges = useMemo(
-    () => searchedData.search.edges ?? [],
-    [searchedData.search.edges]
+    () => searchedRepoList.search.edges ?? [],
+    [searchedRepoList.search.edges]
   );
 
   if (edges.length === 0) return <EmptyResult />;
@@ -70,9 +70,7 @@ const SearchList = (props: { repositories: SearchListComponent_query$key }) => {
     <>
       {edges.map((edge, index) => {
         if (!edge?.node) return null;
-        return (
-          <SearchItem key={`${edge.cursor}-${index}`} repository={edge.node} />
-        );
+        return <SearchItem key={`${edge.cursor}-${index}`} item={edge.node} />;
       })}
       {hasNext && (
         <section ref={bottomSpinnerRef} className='w-full mt-20pxr h-full'>
