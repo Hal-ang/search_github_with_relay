@@ -1,27 +1,40 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
-const ButtonWithIcon = React.memo(
-  ({
-    selected,
-    text,
-    LeftIcon,
-    onClick,
-  }: {
-    selected: boolean;
-    text: string;
-    LeftIcon: JSX.Element;
-    onClick: () => void;
-  }) => (
+import { ButtonSize } from '../constants';
+
+const Button = ({
+  selected = false,
+  text,
+  LeftIcon,
+  onClick,
+  size,
+}: {
+  selected?: boolean;
+  text: string;
+  LeftIcon?: JSX.Element;
+  onClick: () => void;
+  size: ButtonSize;
+}) => {
+  const sizeClassName = useMemo(
+    () => ({
+      wrapper:
+        size === ButtonSize.Small ? 'py-5pxr px-8pxr' : 'py-12pxr px-16pxr',
+      text: size === ButtonSize.Small ? 'text-15pxr' : 'text-25pxr',
+    }),
+    [size]
+  );
+
+  return (
     <button
       onClick={onClick}
-      className={`mt-5pxr flex flew-row item-center py-5pxr px-8pxr rounded-md hover:bg-green-100 border ${
+      className={`mt-5pxr flex flew-row item-center rounded-md hover:bg-green-100 border ${
         selected ? 'bg-green-50 border-green-400' : 'bg-white border-gray-200'
-      }`}
+      } ${sizeClassName.wrapper}`}
     >
       {LeftIcon}
-      <span className='text-15pxr text-gray-500'>{text}</span>
+      <span className={`text-gray-500 ${sizeClassName.text}`}>{text}</span>
     </button>
-  )
-);
+  );
+};
 
-export default ButtonWithIcon;
+export default Button;

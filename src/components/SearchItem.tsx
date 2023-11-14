@@ -1,7 +1,8 @@
 import { useCallback, useMemo } from 'react';
 import { useFragment, useMutation } from 'react-relay';
 
-import ButtonWithIcon from './Button';
+import Button from './Button';
+import { ButtonSize } from '../constants';
 import { SearchItem_repository$key } from './__generated__/SearchItem_repository.graphql';
 import graphql from 'babel-plugin-relay/macro';
 import starIcon from '../assets/star.svg';
@@ -78,9 +79,10 @@ const SearchItem = (props: { repository: SearchItem_repository$key }) => {
         {name}
       </a>
       <p className='text-gray-500 text-15pxr line-clamp-2'>{description}</p>
-      <ButtonWithIcon
+      <Button
         selected={viewerHasStarred}
         onClick={toggleStarOnRepository}
+        size={ButtonSize.Small}
         LeftIcon={
           <img
             src={starIcon}
