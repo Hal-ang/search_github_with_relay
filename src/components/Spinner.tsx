@@ -26,7 +26,7 @@ const Spinner = React.memo(
         visible
       />
       {text && (
-        <p className='mt-30pxr text-13pxr font-bold text-gray-600'>{text}</p>
+        <p className='mt-30pxr text-13pxr font-bold text-white'>{text}</p>
       )}
     </div>
   )

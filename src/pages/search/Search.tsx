@@ -35,27 +35,29 @@ const Search = () => {
 
   return (
     <main
-      className={`flex flex-col items-center px-16pxr bg-green-50 ${
+      className={`flex flex-col items-center px-16pxr lg:px-100pxr bg-black ${
         !isSearched ? 'justify-center' : 'justify-start'
       }`}
     >
-      <header className='sticky top-0 bg-green-50 w-full py-20pxr flex justify-center'>
-        <form
-          className='flex w-full'
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (isPendingQueryResult) return;
-            setIsSearched(true);
+      <header className='sticky top-0 bg-black w-full py-40pxr flex flex-col justify-center'>
+        <div>
+          <form
+            className='flex w-full'
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (isPendingQueryResult) return;
+              setIsSearched(true);
 
-            resetAndInitiateSearch();
-          }}
-        >
-          <Input
-            value={inputValue}
-            onChange={(e) => setInputValue(e.currentTarget.value)}
-          />
-          <Submit className='ml-5pxr' />
-        </form>
+              resetAndInitiateSearch();
+            }}
+          >
+            <Input
+              value={inputValue}
+              onChange={(e) => setInputValue(e.currentTarget.value)}
+            />
+            <Submit className='ml-5pxr' />
+          </form>
+        </div>
       </header>
       <section className={`w-full mt-30pxr pb-50pxr ${isSearched && 'h-full'}`}>
         {isPendingQueryResult ? (
