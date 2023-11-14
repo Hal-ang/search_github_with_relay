@@ -1,15 +1,16 @@
 import React, { useCallback, useState, useTransition } from 'react';
 
 import Input from '../../components/Input';
+
 import SearchList from '../../components/SearchList';
 import Spinner from '../../components/Spinner';
 import Submit from '../../components/Submit';
 import graphql from 'babel-plugin-relay/macro';
 import { useLazyLoadQuery } from 'react-relay';
-import { SearchComponentQuery } from './__generated__/SearchComponentQuery.graphql';
+import { SearchPageQuery } from './__generated__/SearchPageQuery.graphql';
 
-const SearchComponentQuery = graphql`
-  query SearchComponentQuery($query: String!, $first: Int) {
+const SearchPageQuery = graphql`
+  query SearchPageQuery($query: String!, $first: Int) {
     ...SearchListComponent_query @arguments(query: $query, first: $first)
   }
 `;
@@ -20,8 +21,8 @@ const Search = () => {
   const [query, setQuery] = useState<string>('');
   const [isPendingQueryResult, startTransitionQuery] = useTransition();
 
-  const searchedRepositories = useLazyLoadQuery<SearchComponentQuery>(
-    SearchComponentQuery,
+  const searchedRepositories = useLazyLoadQuery<SearchPageQuery>(
+    SearchPageQuery,
     { query, first: 10 }
   );
 

@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<7424206939c5c4f48e7d895fa6e04fc6>>
+ * @generated SignedSource<<c8a7c8d1ab4f873e689038d545a4432a>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,16 +10,16 @@
 
 import { ConcreteRequest, Query } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type SearchComponentQuery$variables = {
+export type SearchPageQuery$variables = {
   first?: number | null | undefined;
   query: string;
 };
-export type SearchComponentQuery$data = {
+export type SearchPageQuery$data = {
   readonly " $fragmentSpreads": FragmentRefs<"SearchListComponent_query">;
 };
-export type SearchComponentQuery = {
-  response: SearchComponentQuery$data;
-  variables: SearchComponentQuery$variables;
+export type SearchPageQuery = {
+  response: SearchPageQuery$data;
+  variables: SearchPageQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
@@ -67,7 +67,7 @@ return {
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "SearchComponentQuery",
+    "name": "SearchPageQuery",
     "selections": [
       {
         "args": [
@@ -88,7 +88,7 @@ return {
       (v0/*: any*/)
     ],
     "kind": "Operation",
-    "name": "SearchComponentQuery",
+    "name": "SearchPageQuery",
     "selections": [
       {
         "alias": null,
@@ -239,16 +239,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "a25bb0047d8aa7b3fbb2acbc3eff728e",
+    "cacheID": "d5c924f7ac5ba327abeb3ca6b0b97182",
     "id": null,
     "metadata": {},
-    "name": "SearchComponentQuery",
+    "name": "SearchPageQuery",
     "operationKind": "query",
-    "text": "query SearchComponentQuery(\n  $query: String!\n  $first: Int\n) {\n  ...SearchListComponent_query_ReqLQ\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_ReqLQ on Query {\n  search(first: $first, query: $query, type: REPOSITORY) {\n    edges {\n      cursor\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
+    "text": "query SearchPageQuery(\n  $query: String!\n  $first: Int\n) {\n  ...SearchListComponent_query_ReqLQ\n}\n\nfragment SearchItem_repository on Repository {\n  id\n  name\n  url\n  description\n  viewerHasStarred\n  stargazers {\n    totalCount\n  }\n}\n\nfragment SearchListComponent_query_ReqLQ on Query {\n  search(first: $first, query: $query, type: REPOSITORY) {\n    edges {\n      cursor\n      node {\n        __typename\n        ...SearchItem_repository\n        ... on Node {\n          __isNode: __typename\n          id\n        }\n      }\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "8e653ff3beada77804a5599289bc35d5";
+(node as any).hash = "587e1b8371353f53f1971dd5bc6b0633";
 
 export default node;
