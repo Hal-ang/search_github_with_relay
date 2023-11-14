@@ -11,10 +11,9 @@ const Main = () => {
         src='https://github.githubassets.com/assets/hero-glow-f6eed469bca2.svg'
         alt=''
       />
-      <h1 className='font-bold text-40pxr mb-20pxr text-white'>
-        Github 레포 검색
-      </h1>
+      <h1 className='font-bold text-40pxr text-white'>Github 레포 검색</h1>
       <Button
+        className='mt-20pxr'
         size={ButtonSize.Large}
         onClick={() => navigate('/search')}
         text='🔍 검색하러 가기'

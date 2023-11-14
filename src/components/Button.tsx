@@ -8,12 +8,14 @@ const Button = ({
   LeftIcon,
   onClick,
   size,
+  className = '',
 }: {
   selected?: boolean;
   text: string;
   LeftIcon?: JSX.Element;
   onClick: () => void;
   size: ButtonSize;
+  className?: string;
 }) => {
   const sizeClassName = useMemo(
     () => ({
@@ -29,7 +31,7 @@ const Button = ({
       onClick={onClick}
       className={`mt-5pxr flex flew-row item-center rounded-md hover:bg-green-100 border ${
         selected ? 'bg-green-50 border-green-400' : 'bg-white border-gray-200'
-      } ${sizeClassName.wrapper}`}
+      } ${sizeClassName.wrapper} ${className}`}
     >
       {LeftIcon}
       <span className={`text-gray-500 ${sizeClassName.text}`}>{text}</span>

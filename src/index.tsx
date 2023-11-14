@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
+import ErrorPage from './pages/error/ErrorPage';
 import Main from './pages/Main';
 import ReactDOM from 'react-dom/client';
 import { RelayEnvironment } from './RelayEnvironment';
@@ -14,6 +15,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+    errorElement: <ErrorPage />,
     children: [
       {
         index: true,
