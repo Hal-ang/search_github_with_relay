@@ -3,8 +3,10 @@ import { useFragment, useMutation } from 'react-relay';
 
 import Button from './Button';
 import { ButtonSize } from '../constants';
+import { Oval } from 'react-loader-spinner';
 import { SearchItem_repository$key } from './__generated__/SearchItem_repository.graphql';
 import graphql from 'babel-plugin-relay/macro';
+import grayStarIcon from '../assets/gray_star.svg';
 import starIcon from '../assets/star.svg';
 
 const SearchItemRepositoryFragment = graphql`
@@ -51,8 +53,12 @@ const SearchItem = (props: { repository: SearchItem_repository$key }) => {
     [repository]
   );
 
-  const [addStarMutation] = useMutation(AddStarMutation);
-  const [removeStarMutation] = useMutation(RemoveStarMutation);
+  const [addStarMutation, isAdding] = useMutation(AddStarMutation);
+  const [removeStarMutation, isRemoving] = useMutation(RemoveStarMutation);
+  const isLoading = useMemo(
+    () => isAdding || isRemoving,
+    [isAdding, isRemoving]
+  );
 
   const toggleStarOnRepository = useCallback(() => {
     const starMutation = viewerHasStarred
@@ -84,13 +90,27 @@ const SearchItem = (props: { repository: SearchItem_repository$key }) => {
         onClick={toggleStarOnRepository}
         size={ButtonSize.Small}
         LeftIcon={
-          <img
-            src={starIcon}
-            alt='github-star-svg'
-            width={16}
-            height={16}
-            className='mr-4pxr self-center'
-          />
+          isLoading ? (
+            <Oval
+              height={16}
+              width={16}
+              color='#4fa94d'
+              wrapperClass='mr-4pxr self-center'
+              visible
+              ariaLabel='oval-loading'
+              secondaryColor='#4fa94d'
+              strokeWidth={5}
+              strokeWidthSecondary={5}
+            />
+          ) : (
+            <img
+              src={viewerHasStarred ? starIcon : grayStarIcon}
+              alt='github-star-svg'
+              width={16}
+              height={16}
+              className='mr-4pxr self-center'
+            />
+          )
         }
         text={stargazers?.totalCount?.toString() ?? ''}
       />
