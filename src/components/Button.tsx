@@ -29,7 +29,7 @@ const Button = ({
   return (
     <button
       onClick={onClick}
-      className={`mt-5pxr flex flew-row item-center rounded-md hover:bg-green-100 border ${
+      className={`flex flew-row item-center rounded-md hover:bg-green-100 border ${
         selected ? 'bg-green-50 border-green-400' : 'bg-white border-gray-200'
       } ${sizeClassName.wrapper} ${className}`}
     >

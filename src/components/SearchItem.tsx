@@ -86,6 +86,7 @@ const SearchItem = (props: { repository: SearchItem_repository$key }) => {
       </a>
       <p className='text-gray-500 text-15pxr line-clamp-2'>{description}</p>
       <Button
+        className='mt-5pxr'
         selected={viewerHasStarred}
         onClick={toggleStarOnRepository}
         size={ButtonSize.Small}
@@ -112,7 +113,7 @@ const SearchItem = (props: { repository: SearchItem_repository$key }) => {
             />
           )
         }
-        text={stargazers?.totalCount?.toString() ?? ''}
+        text={stargazers?.totalCount?.toLocaleString() ?? ''}
       />
     </div>
   );
