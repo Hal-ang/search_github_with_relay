@@ -25,9 +25,13 @@ const ErrorPage = () => {
         alt=''
       />
       {isPageNotFound ? (
-        <h1 className='text-white text-40pxr font-bold'>404 Not Found</h1>
+        <h1 className='text-white text-40pxr font-bold'>
+          페이지를 찾을 수 없습니다
+        </h1>
       ) : (
-        <h1 className='text-white text-40pxr font-bold'>Error</h1>
+        <h1 className='text-white text-40pxr font-bold'>
+          문제가 발생했습니다!
+        </h1>
       )}
       <Button
         className='mt-80pxr'
