@@ -25,12 +25,19 @@ $npm run start
 
 ## 기능
 
-**깃헙 레포지토리 검색**
+**1. 깃헙 레포지토리 검색**
 
-- 검색어 입력 후 목록 확인 ![진입부터 검색 이동](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/857b0858-2715-4cc5-9b66-ba5c22f87d55)
-- 인피니티 스크롤을 통한 페이지네이션 ![인피니티 스크롤](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/2505270d-d6ea-4320-aac2-13baf63a0be0)
+- 검색어 입력 후 목록 확인
 
-**깃헙 star 토글 기능** ![star](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/03fbeb1b-eb8f-4628-8417-b1764988c8e2)
+![진입부터 검색 이동](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/857b0858-2715-4cc5-9b66-ba5c22f87d55)
+
+- 인피니티 스크롤을 통한 페이지네이션
+
+![인피니티 스크롤](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/2505270d-d6ea-4320-aac2-13baf63a0be0)
+
+**2. 깃헙 star 토글 기능**
+
+![star](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/03fbeb1b-eb8f-4628-8417-b1764988c8e2)
 
 ## 사용 기술
 
@@ -71,10 +78,12 @@ $npm run start
 
 ## 페이지 구성
 
-![Untitled Diagram drawio](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/38259ff1-6afb-4ea7-ab68-0e0bb7a462bd)
+![routing](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/a459c79f-2f7d-46ee-bf68-727efd09c102)
+
 
 모든 페이지는 최상위 컴포넌트 `App.tsx`로부터 파생됩니다. `/src/pages` 폴더 내 구현되어 있는 각 컴포넌트를 페이지로 취급합니다.
 
 ## 검색, 데이터 흐름도
 
-![Untitled Diagram drawio](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/e97ab3e0-8913-4a4c-8bb1-5d553099577e)
+![Untitled Diagram](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/a46e95ab-6e8b-4760-9e87-d3c8dd2b6637)
+
