@@ -1,46 +1,80 @@
-# Getting Started with Create React App
+# Github 레포 검색
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## 인트로
 
-## Available Scripts
+**간편하게 깃허브 레포를 검색해 보세요!**
 
-In the project directory, you can run:
+<img width="900" alt="Screenshot 2023-11-15 at 8 18 04 PM" src="https://github.com/Hal-ang/search_github_with_relay/assets/68503014/afa7b261-b5c1-40ee-9e5f-9861d1f9faa6">
 
-### `npm start`
+## 실행 방법
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+**1. `.env` 파일 생성 후 설정**
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```
+REACT_APP_GITHUB_AUTH_TOKEN=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
+```
 
-### `npm test`
+> 프로젝트를 위해 따로 생성한 계정의 키입니다.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+**2. 터미널 실행**
 
-### `npm run build`
+```
+$npm install
+$npm run start
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## 기능
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+**깃헙 레포지토리 검색**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- 검색어 입력 후 목록 확인 ![진입부터 검색 이동](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/857b0858-2715-4cc5-9b66-ba5c22f87d55)
+- 인피니티 스크롤을 통한 페이지네이션 ![인피니티 스크롤](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/2505270d-d6ea-4320-aac2-13baf63a0be0)
 
-### `npm run eject`
+**깃헙 star 토글 기능** ![star](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/03fbeb1b-eb8f-4628-8417-b1764988c8e2)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 사용 기술
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 1. React (기본 요구사항)
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+**CSR 환경인 이유**
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- 기간 내 완성도를 높이기 위함 (`Next.js` 경험의 부재로 필수 기술인 `Relay` 학습에 초점을 두어 기간 내 완성도를 높이는 데에 집중했습니다.)
 
-## Learn More
+**라우팅**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- `react-router-dom`을 통한 클라이언트 사이드 라우팅, 오류 페이지 핸들링
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+**에러 핸들링**
+
+- `react-router-dom/errorElement` + `react-error-boundary` 를 통한 오류페이지 구현
+
+### 2. Relay (기본 요구사항)
+
+> GraphQL 통신 기반, 자바스크립트 비동기 데이터 페칭 및 상태관리 라이브러리
+
+**co-location 패턴 적용**
+
+- 컴포넌트와 컴포넌트가 필요로 하는 데이터를 한 파일 내에서 확인할 수 있도록 구현
+
+**`usePaginationFragmentQuery` + `IntersectionObserver` 페이지네이션**
+
+- `relay/usePaginationFragmentQuery` 사용, React/state 관리 없이 relay 스토어에 저장하고 있는 목록을 그대로 렌더링할 수 있도록 구현
+- `SearchList.tsx` 하단 footer를 `IntersectionObserver`로 감지하여 인피니티 스크롤 구현
+  - 유효 데이터가 존재하고 footer가 뷰포인트에 존재하는 경우 호출
+
+### 3. TailwindCSS (style)
+
+**pxr 단위 정의**
+
+- 반응형 사이즈 구현을 위한 pxr 단위 정의 (tailwind.config.js)
+  - `16pxr === 1rem`, px 값을 pxr로 사용하여 rem으로 자동 변환
+
+## 페이지 구성
+
+![Untitled Diagram drawio](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/38259ff1-6afb-4ea7-ab68-0e0bb7a462bd)
+
+모든 페이지는 최상위 컴포넌트 `App.tsx`로부터 파생됩니다. `/src/pages` 폴더 내 구현되어 있는 각 컴포넌트를 페이지로 취급합니다.
+
+## 검색, 데이터 흐름도
+
+![Untitled Diagram drawio](https://github.com/Hal-ang/search_github_with_relay/assets/68503014/e97ab3e0-8913-4a4c-8bb1-5d553099577e)
