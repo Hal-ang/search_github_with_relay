@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import EmptyResult from './EmptyResult';
 import SearchItem from './SearchItem';
-import { SearchListComponent_query$key } from './__generated__/SearchListComponent_query.graphql';
+import { SearchListComponent_query$key } from '../graphql/__generated__/SearchListComponent_query.graphql';
 import Spinner from './Spinner';
 import graphql from 'babel-plugin-relay/macro';
 import { usePaginationFragment } from 'react-relay';

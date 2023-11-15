@@ -2,7 +2,7 @@ import React, { useCallback, useState, useTransition } from 'react';
 
 import Input from '../../components/Input';
 import SearchList from '../../components/SearchList';
-import { SearchQuery } from './__generated__/SearchQuery.graphql';
+import { SearchQuery } from '../../graphql/__generated__/SearchQuery.graphql';
 import Spinner from '../../components/Spinner';
 import Submit from '../../components/Submit';
 import graphql from 'babel-plugin-relay/macro';

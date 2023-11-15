@@ -4,7 +4,7 @@ import { useFragment, useMutation } from 'react-relay';
 import Button from './Button';
 import { ButtonSize } from '../constants';
 import { Oval } from 'react-loader-spinner';
-import { SearchItem_repository$key } from './__generated__/SearchItem_repository.graphql';
+import { SearchItem_repository$key } from '../graphql/__generated__/SearchItem_repository.graphql';
 import graphql from 'babel-plugin-relay/macro';
 import grayStarIcon from '../assets/gray_star.svg';
 import starIcon from '../assets/star.svg';
