@@ -2,6 +2,7 @@ import React, { Suspense } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
+import { ErrorBoundary } from 'react-error-boundary';
 import ErrorPage from './pages/error/ErrorPage';
 import Main from './pages/Main';
 import ReactDOM from 'react-dom/client';
@@ -32,16 +33,18 @@ const root = ReactDOM.createRoot(
 root.render(
   <RelayEnvironmentProvider environment={RelayEnvironment}>
     <React.StrictMode>
-      <Suspense
-        fallback={
-          <Spinner
-            className='w-full h-screen bg-green-50'
-            text='불러오는 중입니다..'
-          />
-        }
-      >
-        <RouterProvider router={router} />
-      </Suspense>
+      <ErrorBoundary fallback={<ErrorPage />}>
+        <Suspense
+          fallback={
+            <Spinner
+              className='w-full h-screen bg-green-50'
+              text='불러오는 중입니다..'
+            />
+          }
+        >
+          <RouterProvider router={router} />
+        </Suspense>
+      </ErrorBoundary>
     </React.StrictMode>
   </RelayEnvironmentProvider>
 );
