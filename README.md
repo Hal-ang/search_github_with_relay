@@ -1,5 +1,6 @@
 # Github 레포 검색
 **간편하게 깃허브 레포를 검색해 보세요!**
+> github graphql API를 활용한 프로젝트입니다.
 
 <br>
 <img width="900" alt="Screenshot 2023-11-15 at 8 18 04 PM" src="https://github.com/Hal-ang/search_github_with_relay/assets/68503014/afa7b261-b5c1-40ee-9e5f-9861d1f9faa6">
@@ -71,7 +72,7 @@ $npm run start
 
 <br>
 
-## Relay (기본 요구사항)
+## Relay (기본 요구사항) + GraphQL
 
 > GraphQL 통신 기반, 자바스크립트 비동기 데이터 페칭 및 상태관리 라이브러리
 
