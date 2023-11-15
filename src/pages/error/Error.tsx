@@ -8,7 +8,7 @@ import Button from '../../components/Button';
 import { ButtonSize } from '../../constants';
 import { useMemo } from 'react';
 
-const ErrorPage = () => {
+const Error = () => {
   const error = useRouteError();
   const navigate = useNavigate();
 
@@ -38,4 +38,4 @@ const ErrorPage = () => {
   );
 };
 
-export default ErrorPage;
+export default Error;

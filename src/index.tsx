@@ -2,8 +2,8 @@ import React, { Suspense } from 'react';
 import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 
 import App from './App';
+import Error from './pages/error/Error';
 import { ErrorBoundary } from 'react-error-boundary';
-import ErrorPage from './pages/error/ErrorPage';
 import Main from './pages/Main';
 import ReactDOM from 'react-dom/client';
 import { RelayEnvironment } from './RelayEnvironment';
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <ErrorPage />,
+    errorElement: <Error />,
     children: [
       {
         index: true,
@@ -33,7 +33,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <RelayEnvironmentProvider environment={RelayEnvironment}>
     <React.StrictMode>
-      <ErrorBoundary fallback={<ErrorPage />}>
+      <ErrorBoundary fallback={<Error />}>
         <Suspense
           fallback={
             <Spinner
