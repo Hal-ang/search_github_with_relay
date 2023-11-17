@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<a8c8ec8a13d97b819aabcfa3c408e695>>
+ * @generated SignedSource<<6654c9df5ce47d4c73955f626fa6cff3>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,6 +19,9 @@ export type SearchItemAddStarMutation$variables = {
 export type SearchItemAddStarMutation$data = {
   readonly addStar: {
     readonly starrable: {
+      readonly stargazers: {
+        readonly totalCount: number;
+      };
       readonly viewerHasStarred: boolean;
     } | null | undefined;
   } | null | undefined;
@@ -49,6 +52,24 @@ v2 = {
   "kind": "ScalarField",
   "name": "viewerHasStarred",
   "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "StargazerConnection",
+  "kind": "LinkedField",
+  "name": "stargazers",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "totalCount",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -73,7 +94,8 @@ return {
             "name": "starrable",
             "plural": false,
             "selections": [
-              (v2/*: any*/)
+              (v2/*: any*/),
+              (v3/*: any*/)
             ],
             "storageKey": null
           }
@@ -114,6 +136,7 @@ return {
                 "storageKey": null
               },
               (v2/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -130,16 +153,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "4500aa39ed6c0a7badd717bad009d52c",
+    "cacheID": "11fbec980d675cbfa21d6e7252c243d8",
     "id": null,
     "metadata": {},
     "name": "SearchItemAddStarMutation",
     "operationKind": "mutation",
-    "text": "mutation SearchItemAddStarMutation(\n  $input: AddStarInput!\n) {\n  addStar(input: $input) {\n    starrable {\n      __typename\n      viewerHasStarred\n      id\n    }\n  }\n}\n"
+    "text": "mutation SearchItemAddStarMutation(\n  $input: AddStarInput!\n) {\n  addStar(input: $input) {\n    starrable {\n      __typename\n      viewerHasStarred\n      stargazers {\n        totalCount\n      }\n      id\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "c00fc2dcb4f637b48ce87426936db783";
+(node as any).hash = "dd835e80688a2e866dfae5bc40027a7c";
 
 export default node;

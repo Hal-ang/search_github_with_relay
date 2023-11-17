@@ -12,7 +12,7 @@ const Error = () => {
   const error = useRouteError();
   const navigate = useNavigate();
 
-  const isPageNotFound = useMemo(
+  const errorText = useMemo(
     () =>
       isRouteErrorResponse(error) && error.status === 404
         ? '페이지를 찾을 수 없습니다'
@@ -27,7 +27,7 @@ const Error = () => {
         src='https://www.freeiconspng.com/thumbs/warning-icon-png/status-warning-icon-png-29.png'
         alt=''
       />
-      <h1 className='text-white text-40pxr font-bold'>{isPageNotFound}</h1>
+      <h1 className='text-white text-40pxr font-bold'>{errorText}</h1>
       <Button
         className='mt-80pxr'
         size={ButtonSize.Large}

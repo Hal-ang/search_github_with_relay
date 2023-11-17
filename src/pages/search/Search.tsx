@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useTransition } from 'react';
+import React, { useCallback, useRef, useState, useTransition } from 'react';
 
 import Input from '../../components/Input';
 import SearchList from '../../components/SearchList';
@@ -15,8 +15,9 @@ const SearchPageQuery = graphql`
 `;
 
 const Search = () => {
-  const [isSearched, setIsSearched] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isFirstSearched, setIsFirstSearched] = useState(false);
+
   const [query, setQuery] = useState('');
   const [isPendingQueryResult, startTransitionQuery] = useTransition();
 
@@ -25,18 +26,16 @@ const Search = () => {
     first: 10,
   });
 
-  const resetAndInitiateSearch = useCallback(() => {
-    if (query === inputValue) return;
-
+  const updateQueryForSearch = useCallback(() => {
     startTransitionQuery(() => {
-      setQuery(inputValue);
+      setQuery(inputRef.current?.value || '');
     });
-  }, [query, inputValue]);
+  }, [query, inputRef?.current?.value]);
 
   return (
     <main
       className={`flex flex-col items-center px-16pxr lg:px-100pxr bg-black ${
-        !isSearched ? 'justify-center' : 'justify-start'
+        !isFirstSearched ? 'justify-center' : 'justify-start'
       }`}
     >
       <header className='sticky top-0 bg-black w-full py-40pxr flex flex-col justify-center'>
@@ -45,24 +44,24 @@ const Search = () => {
             className='flex w-full'
             onSubmit={(e) => {
               e.preventDefault();
-              if (isPendingQueryResult) return;
-              setIsSearched(true);
 
-              resetAndInitiateSearch();
+              if (isPendingQueryResult) return;
+              setIsFirstSearched(true);
+
+              updateQueryForSearch();
             }}
           >
-            <Input
-              value={inputValue}
-              onChange={(e) => setInputValue(e.currentTarget.value)}
-            />
+            <Input ref={inputRef} />
             <Submit className='ml-5pxr' />
           </form>
         </div>
       </header>
-      <section className={`w-full mt-30pxr pb-50pxr ${isSearched && 'h-full'}`}>
+      <section
+        className={`w-full mt-30pxr pb-50pxr ${isFirstSearched && 'h-full'}`}
+      >
         {isPendingQueryResult ? (
           <Spinner className='mt-50pxr' text='열심히 검색 중입니다...' />
-        ) : isSearched ? (
+        ) : isFirstSearched ? (
           <SearchList list={searchedRepoList} />
         ) : null}
       </section>

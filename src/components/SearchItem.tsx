@@ -27,6 +27,9 @@ const AddStarMutation = graphql`
     addStar(input: $input) {
       starrable {
         viewerHasStarred
+        stargazers {
+          totalCount
+        }
       }
     }
   }
@@ -37,6 +40,9 @@ const RemoveStarMutation = graphql`
     removeStar(input: $input) {
       starrable {
         viewerHasStarred
+        stargazers {
+          totalCount
+        }
       }
     }
   }
@@ -48,11 +54,6 @@ const SearchItem = (props: { item: SearchItem_repository$key }) => {
     props.item
   );
 
-  const { id, url, name, description, viewerHasStarred, stargazers } = useMemo(
-    () => searchedRepoData,
-    [searchedRepoData]
-  );
-
   const [addStarMutation, isAdding] = useMutation(AddStarMutation);
   const [removeStarMutation, isRemoving] = useMutation(RemoveStarMutation);
   const isLoading = useMemo(
@@ -61,33 +62,35 @@ const SearchItem = (props: { item: SearchItem_repository$key }) => {
   );
 
   const toggleStarOnRepository = useCallback(() => {
-    const starMutation = viewerHasStarred
+    const starMutation = searchedRepoData.viewerHasStarred
       ? removeStarMutation
       : addStarMutation;
 
     starMutation({
       variables: {
         input: {
-          starrableId: id,
+          starrableId: searchedRepoData.id,
         },
       },
     });
-  }, [viewerHasStarred, id, addStarMutation, removeStarMutation]);
+  }, [searchedRepoData, , addStarMutation, removeStarMutation]);
 
   return (
     <div className='w-full flex flex-col items-start px-16pxr py-8pxr bg-white mt-10pxr rounded-md border border-gray-200'>
       <a
         target='_blank'
-        href={url}
+        href={searchedRepoData.url}
         rel='noreferrer'
         className='font-bold text-20pxr hover:underline'
       >
-        {name}
+        {searchedRepoData.name}
       </a>
-      <p className='text-gray-500 text-15pxr line-clamp-2'>{description}</p>
+      <p className='text-gray-500 text-15pxr line-clamp-2'>
+        {searchedRepoData.description}
+      </p>
       <Button
         className='mt-5pxr'
-        selected={viewerHasStarred}
+        selected={searchedRepoData.viewerHasStarred}
         onClick={toggleStarOnRepository}
         size={ButtonSize.Small}
         LeftIcon={
@@ -105,7 +108,7 @@ const SearchItem = (props: { item: SearchItem_repository$key }) => {
             />
           ) : (
             <img
-              src={viewerHasStarred ? starIcon : grayStarIcon}
+              src={searchedRepoData.viewerHasStarred ? starIcon : grayStarIcon}
               alt='github-star-svg'
               width={16}
               height={16}
@@ -113,7 +116,7 @@ const SearchItem = (props: { item: SearchItem_repository$key }) => {
             />
           )
         }
-        text={stargazers?.totalCount?.toLocaleString() ?? ''}
+        text={searchedRepoData.stargazers?.totalCount?.toLocaleString() ?? ''}
       />
     </div>
   );

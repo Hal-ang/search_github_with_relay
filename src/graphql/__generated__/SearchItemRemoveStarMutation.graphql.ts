@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<cce21638355cd06047e34ae6006a8398>>
+ * @generated SignedSource<<141e34fc857b0411211177fadf185933>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -19,6 +19,9 @@ export type SearchItemRemoveStarMutation$variables = {
 export type SearchItemRemoveStarMutation$data = {
   readonly removeStar: {
     readonly starrable: {
+      readonly stargazers: {
+        readonly totalCount: number;
+      };
       readonly viewerHasStarred: boolean;
     } | null | undefined;
   } | null | undefined;
@@ -49,6 +52,24 @@ v2 = {
   "kind": "ScalarField",
   "name": "viewerHasStarred",
   "storageKey": null
+},
+v3 = {
+  "alias": null,
+  "args": null,
+  "concreteType": "StargazerConnection",
+  "kind": "LinkedField",
+  "name": "stargazers",
+  "plural": false,
+  "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "totalCount",
+      "storageKey": null
+    }
+  ],
+  "storageKey": null
 };
 return {
   "fragment": {
@@ -73,7 +94,8 @@ return {
             "name": "starrable",
             "plural": false,
             "selections": [
-              (v2/*: any*/)
+              (v2/*: any*/),
+              (v3/*: any*/)
             ],
             "storageKey": null
           }
@@ -114,6 +136,7 @@ return {
                 "storageKey": null
               },
               (v2/*: any*/),
+              (v3/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -130,16 +153,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "1f7b3f497dacbb60ee21ed1c2cd2b017",
+    "cacheID": "58fe9cbf5f32bb1c46cef69aad8c483f",
     "id": null,
     "metadata": {},
     "name": "SearchItemRemoveStarMutation",
     "operationKind": "mutation",
-    "text": "mutation SearchItemRemoveStarMutation(\n  $input: RemoveStarInput!\n) {\n  removeStar(input: $input) {\n    starrable {\n      __typename\n      viewerHasStarred\n      id\n    }\n  }\n}\n"
+    "text": "mutation SearchItemRemoveStarMutation(\n  $input: RemoveStarInput!\n) {\n  removeStar(input: $input) {\n    starrable {\n      __typename\n      viewerHasStarred\n      stargazers {\n        totalCount\n      }\n      id\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "5cc864f41fba1ad7257dcae5145d44e7";
+(node as any).hash = "e8b2562d34cd9b8afcc1d6b1246915e1";
 
 export default node;

@@ -45,9 +45,8 @@ const SearchList = (props: { list: SearchListComponent_query$key }) => {
         loadNext(20);
       });
     },
-    [hasNext, isLoadingNext]
+    [hasNext, isLoadingNext, loadNext]
   );
-
   const observer = useMemo(
     () => new IntersectionObserver(observerAndLoadMore),
     [observerAndLoadMore]
@@ -59,16 +58,15 @@ const SearchList = (props: { list: SearchListComponent_query$key }) => {
     observer.observe(bottomSpinnerRef.current);
   }, [searchedRepoList?.search?.edges]);
 
-  const edges = useMemo(
-    () => searchedRepoList.search.edges ?? [],
-    [searchedRepoList.search.edges]
-  );
-
-  if (edges.length === 0) return <EmptyResult />;
+  if (
+    !searchedRepoList.search.edges ||
+    searchedRepoList.search.edges.length === 0
+  )
+    return <EmptyResult />;
 
   return (
     <>
-      {edges.map((edge, index) => {
+      {searchedRepoList.search.edges.map((edge, index) => {
         if (!edge?.node) return null;
         return <SearchItem key={`${edge.cursor}-${index}`} item={edge.node} />;
       })}
