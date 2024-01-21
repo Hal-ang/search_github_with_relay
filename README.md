@@ -49,11 +49,7 @@ $npm run start
 
 # 사용 기술
 
-## React (기본 요구사항)
-
-**CSR 환경인 이유**
-
-- 기간 내 완성도를 높이기 위함 (`Next.js` 경험의 부재로 필수 기술인 `Relay` 학습에 초점을 두어 기간 내 완성도를 높이는 데에 집중했습니다.)
+## React
 
 <br>
 
@@ -69,7 +65,7 @@ $npm run start
 
 <br>
 
-## Relay (기본 요구사항) + GraphQL
+## Relay + GraphQL
 
 > GraphQL 통신 기반, 자바스크립트 비동기 데이터 페칭 및 상태관리 라이브러리
 
