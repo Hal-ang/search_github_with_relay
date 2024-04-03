@@ -13,7 +13,7 @@
 **1. `.env` 파일 생성 후 설정**
 
 ```
-REACT_APP_GITHUB_AUTH_TOKEN=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
+REACT_APP_GITHUB_AUTH_TOKEN=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
 ```
 
 > 구동을 위해 별도로 생성한 테스트 계정의 토큰입니다.
